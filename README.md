@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a virtual pet game designed to be engaging, interactive, and educational for young users aged 7-12. The game allows players to care for and interact with a virtual pet, managing its well-being through feeding, playing, and tending to its needs. The game is set in a fun, visually appealing environment with intuitive controls, designed to foster a sense of responsibility in players while providing a delightful gaming experience.
+This project is a virtual pet game designed to be engaging, interactive, and educational for young users aged 7-12. The game allows players to care for and interact with a virtual pet, managing its well-being through feeding, playing, and tending to its needs. The game is set in a fun, visually appealing environment with intuitive controls, designed to foster a sense of responsibility in players while providing a delightful gaming experience. 
 
 ---
 
@@ -92,4 +92,4 @@ Players can issue commands to interact with their pet:
 --- 
 
 ## License
-This is a UWO project. License information will be added if applicable.
+
