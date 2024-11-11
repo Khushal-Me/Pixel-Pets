@@ -5,16 +5,15 @@ public class GameControllerTest {
     public static void main(String[] args) {
         GameController controller = GameController.getInstance();
         
-        // Add event listener
-        controller.addEventListener(event -> System.out.println("[EVENT] " + event));
+        // Add an event listener
+        GameEventListener listener = event -> System.out.println("[EVENT] " + event);
+        controller.addEventListener(listener);
         
-        // Test state changes
+        // Test state changes and start game loop
         controller.changeState(new MainMenuState());
-        
-        // Start game loop
         controller.startGameLoop();
-        
-        // Let it run for a few seconds
+
+        // Let the loop run for a few ticks
         try {
             Thread.sleep(2000);
             
@@ -22,10 +21,13 @@ public class GameControllerTest {
             controller.changeState(new PlayState());
             Thread.sleep(2000);
             
-            // Stop game loop
+            // Remove the event listener and change state
+            controller.removeEventListener(listener);
+            System.out.println("Listener removed. No more [EVENT] logs should appear.");
+            controller.changeState(new MainMenuState());  // This change should not trigger any event logs
+
+            // Stop game loop and cleanup
             controller.stopGameLoop();
-            
-            // Cleanup
             controller.cleanup();
             
         } catch (InterruptedException e) {

@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameController {
     private static GameController instance;
@@ -10,6 +12,7 @@ public class GameController {
     private Timer gameTimer;
     private boolean isRunning;
     private static final long TICK_RATE = 100; // 100ms tick rate
+    private static final Logger logger = Logger.getLogger(GameController.class.getName());
 
     private GameController() {
         gameTimer = new Timer("GameTimer", true);
@@ -25,6 +28,10 @@ public class GameController {
 
     public void addEventListener(GameEventListener listener) {
         eventListeners.add(listener);
+    }
+
+    public void removeEventListener(GameEventListener listener) {
+        eventListeners.remove(listener);
     }
 
     public GameState getCurrentState() {
@@ -73,7 +80,9 @@ public class GameController {
                 currentState.execute();
                 notifyEventListeners("Tick: " + System.currentTimeMillis());
             } catch (Exception e) {
-                notifyEventListeners("Error in game tick: " + e.getMessage());
+                String errorMessage = "Error in game tick: " + e.getMessage();
+                logger.log(Level.SEVERE, errorMessage, e);
+                notifyEventListeners(errorMessage);
             }
         }
     }
