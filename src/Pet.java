@@ -1,7 +1,7 @@
-import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 public class Pet {
     // Core Stats (0-100)
@@ -15,7 +15,6 @@ public class Pet {
     private PersonalityType personality;
     private Mood currentMood;
     private Status status;
-    private LocalDateTime lastUpdate;
     private String currentSpritePath;
     private String currentAnimationPath;
     
@@ -67,7 +66,6 @@ public class Pet {
         this.energy = 100;
         
         this.status = Status.AWAKE;
-        this.lastUpdate = LocalDateTime.now();
         updateMood();
         
         // Default sprite and animation paths
@@ -81,19 +79,16 @@ public class Pet {
     }
     
     // Core update method - call this regularly (e.g., every minute)
-    public void update() {
-        LocalDateTime now = LocalDateTime.now();
-        long minutesElapsed = java.time.Duration.between(lastUpdate, now).toMinutes();
-        
+    public void update(long millisElapsed) {
+        double minutesElapsed = millisElapsed / 60000.0;
         if (minutesElapsed > 0) {
             updateStats(minutesElapsed);
             updateMood();
             updateSprites();
-            lastUpdate = now;
         }
     }
     
-    private void updateStats(long minutesElapsed) {
+    private void updateStats(double minutesElapsed) {
         if (status != Status.SLEEPING) {
             // Apply time-based decay
             modifyHunger(-BASE_HUNGER_DECAY * minutesElapsed * personality.hungerModifier);
@@ -130,6 +125,8 @@ public class Pet {
     
     // Mood calculation based on stats
     private void updateMood() {
+        Mood oldMood = currentMood;
+
         if (health < 30) {
             currentMood = Mood.SICK;
         } else if (hunger < 20) {
@@ -153,6 +150,10 @@ public class Pet {
         // Special moods based on combinations
         if (energy > 80 && happiness > 70) {
             currentMood = Mood.PLAYFUL;
+        }
+
+        if (currentMood != oldMood) {
+            notifyEventListeners("Mood changed from " + oldMood + " to " + currentMood);
         }
     }
     
@@ -254,5 +255,22 @@ public class Pet {
     
     public enum NeedType {
         HUNGER, HAPPINESS, HEALTH, ENERGY
+    }
+    
+    // Event listeners for pet events
+    private List<GameEventListener> eventListeners = new ArrayList<>();
+
+    public void addEventListener(GameEventListener listener) {
+        eventListeners.add(listener);
+    }
+
+    public void removeEventListener(GameEventListener listener) {
+        eventListeners.remove(listener);
+    }
+
+    private void notifyEventListeners(String event) {
+        for (GameEventListener listener : eventListeners) {
+            listener.onEvent(event);
+        }
     }
 }
