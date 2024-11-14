@@ -86,11 +86,7 @@ Players can issue commands to interact with their pet:
 
 ## Authors and Credits
 - **Team Number**: Team 07
-- **Project Term**: Fall 2024
+- **Project Term**: Fall 2024 for CS 2212
 - **University**: Western University (UWO)
 
 --- 
-
-## License
-
-
