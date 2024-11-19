@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +56,7 @@ public class PetView extends JFrame {
    * Constructor for the view.
    */
   public PetView() {
-    setTitle("Neo Pets");
+    setTitle("Pixel Pets");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(600, 600);
     setLocationRelativeTo(null);
@@ -102,6 +103,10 @@ public class PetView extends JFrame {
    inventoryPanel.add(new JLabel("Inventory"), BorderLayout.NORTH);
    inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
    inventoryPanel.add(useItemButton, BorderLayout.SOUTH);
+   inventoryPanel.setPreferredSize(new Dimension(300, 500)); // Adjust width and height as needed
+   inventoryList.setPreferredSize(new Dimension(300, 500));
+
+
    vetButton = new JButton("Take Pet to Vet");
 
     // Add vetButton to buttonsPanel
@@ -168,8 +173,21 @@ public void updatePetImage(String petName, boolean isDead) {
   } else {
       imagePath = "/res/" + petName.toLowerCase() + ".jpeg";
   }
-    ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
-    petImageLabel.setIcon(icon);
+  java.net.URL imgURL = getClass().getResource(imagePath);
+  if (imgURL != null) {
+      ImageIcon originalIcon = new ImageIcon(imgURL);
+
+      // Scale the image to desired size
+      int desiredWidth = 300; // Adjust as needed
+      int desiredHeight = 300; // Adjust as needed
+
+      Image scaledImage = originalIcon.getImage().getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+      ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+      petImageLabel.setIcon(scaledIcon);
+  } else {
+      System.err.println("Couldn't find file: " + imagePath);
+  }
 }
 
   /**
