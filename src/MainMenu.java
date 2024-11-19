@@ -1,5 +1,4 @@
-/*Main Menu and  */
-
+/*Main Menu   */
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -74,10 +73,12 @@ public class MainMenu extends JFrame {
     }
 
     private void startNewGame() {
+        //Change the music to normal gameplay music
+        MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav");
         // Create model, view, and controller
         Pet petModel = new Pet();
         PetView gameView = new PetView();
-        PetController controller = new PetController(petModel, gameView);
+        PetController controller = new PetController(petModel, gameView, this);
 
         // Hide the main menu
         setVisible(false);

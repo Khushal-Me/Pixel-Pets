@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -13,10 +14,12 @@ public class PetController {
 
   private final Pet model;
   private final PetView view;
+  private final MainMenu mainMenu;
   private String previousHealthStatus = "";
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
   private Action previousPreferredAction = null;
   private boolean isFirstActionSet = true;
+  private boolean deathHandled = false;
 
   /**
    * Constructor for the controller.
@@ -24,11 +27,13 @@ public class PetController {
    * @param model the model
    * @param view  the view
    */
-  public PetController(Pet model, PetView view) {
+  public PetController(Pet model, PetView view, MainMenu mainMenu) {
     this.model = model;
     this.view = view;
+    this.mainMenu = mainMenu;
 
     view.setController(this);
+    view.addVetButtonListener(e -> handleVetAction());
 
     view.displayPetSelectionDialog();
     if (model.getPersonality() != null) {
@@ -54,7 +59,16 @@ public class PetController {
     view.addSleepListener(e -> handleSleepAction());
     view.addPreferredActionListener(e -> getPreferredActionButton());
     view.addPerformPreferredActionListener(e -> performPreferredActionButton());
-  }
+    view.addBackButtonListener(e -> handleBackToMainMenu()); // Add this line
+
+    // Start the item generator
+    model.startItemGenerator();
+
+    // Add listener for use item button
+    view.addUseItemListener(e -> handleUseItem());
+    // Update inventory view periodically or whenever items are added
+    updateInventoryView();
+}
 
   /**
    * This method updates the view.
@@ -81,6 +95,7 @@ public class PetController {
     checkForPreferredActionChange();
 
     if (model.checkDeath()) {
+      deathHandled = true;
       handlePetDeath();
     } else {
       if (model.getHunger() > 60) {
@@ -134,24 +149,29 @@ public class PetController {
    * This method restarts the game.
    */
   private void restartGame() {
+
     // Reset the model
     model.reset();
-
+    model.stopItemGenerator();
     // Reset any other necessary states or flags
     previousHealthStatus = "";
     isFirstActionSet = true;
-
+    // Reset deathHandled flag
+    deathHandled = false;
     // Update view to reflect the reset model
     view.reset();
-
     // Update the view to reflect changes in the model
     updateView();
     view.setController(this);
 
+    view.displayPetSelectionDialog();
     if (model.getPersonality() != null) {
       model.setAllowTaskExecution();
     }
 
+    // Restart the music to normal gameplay music
+    MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"); 
+    model.startItemGenerator();
     model.startTimer();
     Timer timer = new Timer();
 
@@ -165,6 +185,7 @@ public class PetController {
         updateView();
       }
     }, 0, 5000);
+    
   }
 
   /**
@@ -174,9 +195,10 @@ public class PetController {
    */
   public void handleSelectedPersonality(PersonalityStrategy personality, String petName) {
     model.setPersonality(personality);
+    model.setPetName(petName); 
     model.setAllowTaskExecution();
     // Update the pet image in the view
-    view.updatePetImage(petName);
+    view.updatePetImage(petName, false); // Pet is alive
 }
 
   /**
@@ -257,6 +279,13 @@ public class PetController {
    * This method handles the death of the pet.
    */
   public void handlePetDeath() {
+    // Update the pet image to the dead state
+    view.updatePetImage(model.getPetName(), true); // Assuming you have getPetName()
+    // Disable action buttons
+    view.setActionButtonsEnabled(false);
+    // Change the music to the dead state music
+    MusicPlayer.getInstance().changeMusic("res/etxrnall - your love is my drug (8bit slowed).wav");
+
     Object[] options = {"End Game", "Restart"};
     int choice = JOptionPane.showOptionDialog(
         view,
@@ -276,5 +305,42 @@ public class PetController {
     } else if (choice == JOptionPane.NO_OPTION) {
       restartGame();
     }
+  }
+  public void handleBackToMainMenu() {
+    model.stopItemGenerator();
+    // Perform any necessary cleanup
+    model.save(); // Save the game state if needed
+    model.stopTimers(); // We'll implement this method to stop timers
+    view.dispose(); // Close the game window
+
+
+    // Change the music to the main menu music
+    MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"); // Replace with actual path
+
+    // Show the main menu
+    mainMenu.setVisible(true);
+}
+
+private void updateInventoryView() {
+        List<Item> items = model.getInventory().getItems();
+        view.updateInventory(items);
+    }
+
+    private void handleUseItem() {
+        List<Item> items = model.getInventory().getItems();
+        Item selectedItem = view.getSelectedItem(items);
+        if (selectedItem != null) {
+            selectedItem.use(model);
+            model.getInventory().removeItem(selectedItem);
+            updateInventoryView();
+            updateView(); // Update pet's stats after using the item
+        } else {
+            JOptionPane.showMessageDialog(view, "Please select an item to use.", "No Item Selected", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    private void handleVetAction() {
+      model.increaseHealth(30);
+      updateView();
+      view.appendMessage("You took your pet to the vet. Health increased by 30.");
   }
 }

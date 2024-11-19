@@ -1,13 +1,18 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimerTask;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,7 +44,11 @@ public class PetView extends JFrame {
   private boolean socialAlertShown = false;
   private boolean isDialogOpen = false;
   private JLabel petImageLabel;
-  //private JButton saveButton;
+  private JButton backButton; 
+  private DefaultListModel<String> inventoryListModel;
+  private JList<String> inventoryList;
+  private JButton useItemButton;
+  private JButton vetButton;
 
 
   /**
@@ -76,11 +85,27 @@ public class PetView extends JFrame {
     sleepButton = new JButton("Sleep");
     getPreferredActionButton = new JButton("Get Preferred Action");
     performPreferredActionButton = new JButton("Perform Preferred Action");
-
+    backButton = new JButton("Back to Main Menu");
     //saveButton.addActionListener(e -> saveGame());
     //add(saveButton, BorderLayout.SOUTH);
 
+   // Inventory Panel
+   inventoryListModel = new DefaultListModel<>();
+   inventoryList = new JList<>(inventoryListModel);
+   JScrollPane inventoryScrollPane = new JScrollPane(inventoryList);
+   inventoryScrollPane.setPreferredSize(new Dimension(200, 400));
 
+   useItemButton = new JButton("Use Item");
+
+   JPanel inventoryPanel = new JPanel();
+   inventoryPanel.setLayout(new BorderLayout());
+   inventoryPanel.add(new JLabel("Inventory"), BorderLayout.NORTH);
+   inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
+   inventoryPanel.add(useItemButton, BorderLayout.SOUTH);
+   vetButton = new JButton("Take Pet to Vet");
+
+    // Add vetButton to buttonsPanel
+    // Add inventory panel to main panel
     panel.add(healthLabel);
     panel.add(hungerLabel);
     panel.add(socialLabel);
@@ -92,8 +117,12 @@ public class PetView extends JFrame {
     panel.add(feedButton);
     panel.add(playButton);
     panel.add(sleepButton);
+    panel.add(vetButton);
+    panel.add(backButton);
     panel.add(getPreferredActionButton);
     panel.add(performPreferredActionButton);
+
+    panel.add(inventoryPanel);
 
     // Initially hide other attributes and buttons
     toggleAttributesVisibility(false);
@@ -132,8 +161,13 @@ public void displayPetSelectionDialog() {
   }
 }
 
-public void updatePetImage(String petName) {
-    String imagePath = "/res/" + petName.toLowerCase() + ".jpeg";
+public void updatePetImage(String petName, boolean isDead) {
+  String imagePath;
+  if (isDead) {
+      imagePath = "/res/" + petName.toLowerCase() + "_dead.jpg";
+  } else {
+      imagePath = "/res/" + petName.toLowerCase() + ".jpeg";
+  }
     ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
     petImageLabel.setIcon(icon);
 }
@@ -143,9 +177,13 @@ public void updatePetImage(String petName) {
    *
    * @param controller the controller to be set
    */
-  public void setController(PetController controller) {
+public void setController(PetController controller) {
         this.controller = controller;
   }
+
+public void addBackButtonListener(ActionListener listener) {
+    backButton.addActionListener(listener);
+}
 
 
   /**
@@ -164,7 +202,7 @@ public void notifyControllerOfPersonalityChoice(String petName) {
    * @param choice the index of the personality
    * @return the personality
    */
-  private PersonalityStrategy mapNameToPersonality(String petName) {
+private PersonalityStrategy mapNameToPersonality(String petName) {
     PersonalityStrategy selectedPersonality;
     switch (petName) {
         case "Dog":
@@ -522,6 +560,13 @@ public void notifyControllerOfPersonalityChoice(String petName) {
     JOptionPane.showMessageDialog(this, "The pet's preferred action is changing.", "Action Change",
         JOptionPane.INFORMATION_MESSAGE);
   }
+  public void setActionButtonsEnabled(boolean enabled) {
+    feedButton.setEnabled(enabled);
+    playButton.setEnabled(enabled);
+    sleepButton.setEnabled(enabled);
+    getPreferredActionButton.setEnabled(enabled);
+    performPreferredActionButton.setEnabled(enabled);
+}
 
   public class AlertUtils {
     private static boolean isDialogOpen = false;
@@ -550,5 +595,26 @@ public void notifyControllerOfPersonalityChoice(String petName) {
         }
     }
 }
+public void updateInventory(List<Item> items) {
+        inventoryListModel.clear();
+        for (Item item : items) {
+            inventoryListModel.addElement(item.getName());
+        }
+    }
 
+    public void addUseItemListener(ActionListener listener) {
+        useItemButton.addActionListener(listener);
+    }
+
+    public Item getSelectedItem(List<Item> items) {
+        int selectedIndex = inventoryList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            return items.get(selectedIndex);
+        } else {
+            return null;
+        }
+    }
+    public void addVetButtonListener(ActionListener listener) {
+      vetButton.addActionListener(listener);
+  }
 }

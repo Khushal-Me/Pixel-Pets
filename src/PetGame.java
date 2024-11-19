@@ -11,10 +11,12 @@ public class PetGame {
   public static void main(String[] args) {
     Pet model = new Pet();
     PetView view = new PetView();
+    MainMenu mainMenu = new MainMenu();
+    mainMenu.setVisible(false); // We don't need to show it immediately
 
-    PetController controller = new PetController(model, view);
+    PetController controller = new PetController(model, view, mainMenu);
+
     view.setController(controller);
-
     view.setVisible(true);
   }
 }

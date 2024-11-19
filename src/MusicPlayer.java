@@ -6,7 +6,12 @@ import javax.sound.sampled.*;
 public class MusicPlayer {
     private Clip clip;
     private static MusicPlayer instance;
-    
+
+    public void changeMusic(String filePath) {
+        stopMusic();
+        playMusic(filePath);
+    }
+
     private MusicPlayer() {
         // Private constructor to prevent instantiation
     }

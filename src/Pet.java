@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,17 +14,18 @@ import java.util.concurrent.TimeUnit;
  * This class represents a pet.
  */
 public class Pet implements PetModel, Serializable {
-
+  
   private static final long serialVersionUID = 1L;
 
   private static final String SAVE_FILE = "pet_save.dat";
 
-  private ScheduledExecutorService autosaveService;
+  private transient ScheduledExecutorService autosaveService;
 
   private int hunger;
   private int social;
   private int sleep;
   private int health;
+  private Inventory inventory;
 
   // Mark transient fields that cannot be serialized
   private transient TimeSimulator timeSimulator;
@@ -48,6 +50,8 @@ public class Pet implements PetModel, Serializable {
   private boolean isDead = false;
   private boolean allowTaskExecution = false;
 
+  private transient ScheduledExecutorService itemGeneratorService;
+
 
   /**
    * Constructor for the Pet class.
@@ -58,10 +62,13 @@ public class Pet implements PetModel, Serializable {
     sleep = 20;
     health = 100;
     mood = Mood.HAPPY;
+    inventory = new Inventory();
 
     timeSimulator = new TimeSimulator(this);
     lastInteractedTime = System.currentTimeMillis();
     executorService1 = Executors.newScheduledThreadPool(1);
+    startItemGenerator();
+
   }
 
   /**
@@ -539,12 +546,14 @@ public class Pet implements PetModel, Serializable {
     health = 100;
     mood = Mood.HAPPY;
 
+
     // Reset any other attributes or flags as needed
     isDead = false;
     isSleeping = false;
     personalitySet = false;
     personality = null;
     message = null; // Reset any message
+    inventory = new Inventory();
 
     // Reset the last interacted time to the current time
     lastInteractedTime = System.currentTimeMillis();
@@ -606,6 +615,71 @@ public class Pet implements PetModel, Serializable {
         timeSimulator = new TimeSimulator(this);
         executorService1 = Executors.newScheduledThreadPool(1);
         startTimer(); // Restart the timer
+        startItemGenerator();
     }
+  public void stopTimers() {
+      if (executorService1 != null && !executorService1.isShutdown()) {
+          executorService1.shutdownNow();
+      }
+  
+      if (executorService2 != null && !executorService2.isShutdown()) {
+          executorService2.shutdownNow();
+      }
+  
+      if (autosaveService != null && !autosaveService.isShutdown()) {
+          autosaveService.shutdownNow();
+      }
+      // Stop any other services or threads
+  }
+  private String petName;
 
+  public String getPetName() {
+    return petName;
+}
+
+  public void setPetName(String petName) {
+    this.petName = petName;
+}
+public Inventory getInventory() {
+  return inventory;
+}
+
+public void startItemGenerator() {
+  if (itemGeneratorService == null || itemGeneratorService.isShutdown()) {
+    itemGeneratorService = Executors.newSingleThreadScheduledExecutor();
+    itemGeneratorService.scheduleAtFixedRate(() -> {
+        addItemToInventory();
+    }, 0, 30, TimeUnit.SECONDS); // Adjust the interval as needed
+}
+}
+
+private void addItemToInventory() {
+  Random random = new Random();
+  int itemType = random.nextInt(2); // 0 for Food, 1 for Gift
+
+  if (itemType == 0) {
+      Food food = new Food("Food Item");
+      inventory.addItem(food);
+  } else {
+      Gift gift = new Gift("Gift Item");
+      inventory.addItem(gift);
+  }
+}
+
+public void stopItemGenerator() {
+  if (itemGeneratorService != null && !itemGeneratorService.isShutdown()) {
+      itemGeneratorService.shutdownNow();
+  }
+}
+// Call startItemGenerator() when the game starts
+
+public void receiveGift() {
+  // Implement the effect of receiving a gift
+  // For example, increase social or mood attributes
+  social = Math.min(social + 20, 100);
+  mood = Mood.HAPPY;
+}
+public void increaseHealth(int amount) {
+  health = Math.min(health + amount, 100);
+}
 }
