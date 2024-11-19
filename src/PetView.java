@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimerTask;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -37,6 +38,7 @@ public class PetView extends JFrame {
   private boolean sleepAlertShown = false;
   private boolean socialAlertShown = false;
   private boolean isDialogOpen = false;
+  private JLabel petImageLabel;
   //private JButton saveButton;
 
 
@@ -44,7 +46,7 @@ public class PetView extends JFrame {
    * Constructor for the view.
    */
   public PetView() {
-    setTitle("Tamagotchi Game");
+    setTitle("Neo Pets");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(600, 600);
     setLocationRelativeTo(null);
@@ -99,45 +101,42 @@ public class PetView extends JFrame {
     togglePersonalitySelection(true);
 
     // Add a message area to display messages
-    messageArea = new JTextArea(10, 30);
+    messageArea = new JTextArea(20, 30);
     messageArea.setEditable(false); // Make the messageArea read-only
+    messageArea.setLineWrap(true);
+    messageArea.setWrapStyleWord(true);
     JScrollPane scrollPane = new JScrollPane(messageArea);
     panel.add(scrollPane);
 
     add(panel);
+
+    petImageLabel = new JLabel();
+    petImageLabel.setHorizontalAlignment(JLabel.CENTER);
+    // Add the petImageLabel to the panel at the desired position
+    panel.add(petImageLabel);
   }
 
 /**
  * This method displays the personality selection dialog.
  */
-public void displayPersonalitySelectionDialog() {
-  if (isDialogOpen) {
-      return; // Prevent multiple dialogs
-  }
-  isDialogOpen = true;
+public void displayPetSelectionDialog() {
+  PetSelectionDialog dialog = new PetSelectionDialog(this);
+  dialog.setVisible(true);
 
-  String[] options = {"Dog", "Cat", "Bird"};
-  int choice = JOptionPane.showOptionDialog(
-      this,
-      "Choose the pet:",
-      "Pet Selection",
-      JOptionPane.YES_NO_CANCEL_OPTION,
-      JOptionPane.QUESTION_MESSAGE,
-      null,
-      options,
-      options[2]
-  );
-
-  isDialogOpen = false;
-
-  if (choice == JOptionPane.CLOSED_OPTION) {
-      System.exit(0);
+  String selectedPet = dialog.getSelectedPet();
+  if (selectedPet == null) {
+      System.exit(0); // User closed the dialog without selection
   } else {
-      notifyControllerOfPersonalityChoice(choice);
+      notifyControllerOfPersonalityChoice(selectedPet);
       confirmPersonalitySelection();
   }
 }
 
+public void updatePetImage(String petName) {
+    String imagePath = "/res/" + petName.toLowerCase() + ".jpeg";
+    ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
+    petImageLabel.setIcon(icon);
+}
 
   /**
    * This method sets the controller for the view.
@@ -154,10 +153,10 @@ public void displayPersonalitySelectionDialog() {
    *
    * @param choice the index of the personality
    */
-  public void notifyControllerOfPersonalityChoice(int choice) {
-    PersonalityStrategy selectedPersonality = mapIndexToPersonality(choice);
-    controller.handleSelectedPersonality(selectedPersonality);
-  }
+public void notifyControllerOfPersonalityChoice(String petName) {
+    PersonalityStrategy selectedPersonality = mapNameToPersonality(petName);
+    controller.handleSelectedPersonality(selectedPersonality, petName);
+}
 
   /**
    * This method maps the index of the personality to the personality.
@@ -165,30 +164,33 @@ public void displayPersonalitySelectionDialog() {
    * @param choice the index of the personality
    * @return the personality
    */
-  private PersonalityStrategy mapIndexToPersonality(int choice) {
+  private PersonalityStrategy mapNameToPersonality(String petName) {
     PersonalityStrategy selectedPersonality;
-    selectedPersonality = switch (choice) {
-      case 0 -> {
-        messageArea.append("The Dog pet was selected.\n");
-        yield new Dog();
-      }
-      case 1 -> {
-        messageArea.append("The Cat pet was selected.\n");
-        yield new Cat();
-      }
-      case 2 -> {
-        messageArea.append("The Bird pet was selected.\n");
-        yield new Bird();
-      }
-      default -> {
-        messageArea.append("The Bird pet was selected.\n");
-        yield new Bird();
-      }
-    };
+    switch (petName) {
+        case "Dog":
+            messageArea.append("The Dog pet was selected.\n");
+            selectedPersonality = new Dog();
+            break;
+        case "Cat":
+            messageArea.append("The Cat pet was selected.\n");
+            selectedPersonality = new Cat();
+            break;
+        case "Bird":
+            messageArea.append("The Bird pet was selected.\n");
+            selectedPersonality = new Bird();
+            break;
+        default:
+            messageArea.append("The Bird pet was selected.\n");
+            selectedPersonality = new Bird();
+            break;
+    }
+
     return selectedPersonality;
-  }
+}
 
-
+  /**
+   * This method displays the personality selection dialog.
+   */
   /**
    * This method appends a message to the message area.
    *
@@ -510,7 +512,7 @@ public void displayPersonalitySelectionDialog() {
     resetSleepAlert();
     resetSocialAlert();
 
-    displayPersonalitySelectionDialog();
+    displayPetSelectionDialog();
   }
 
   /**

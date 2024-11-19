@@ -30,7 +30,7 @@ public class PetController {
 
     view.setController(this);
 
-    view.displayPersonalitySelectionDialog();
+    view.displayPetSelectionDialog();
     if (model.getPersonality() != null) {
       model.setAllowTaskExecution();
     }
@@ -172,11 +172,12 @@ public class PetController {
    *
    * @param choice the personality choice
    */
-  public void handleSelectedPersonality(PersonalityStrategy choice) {
-    // Set the personality of the pet
-    model.setPersonality(choice);
+  public void handleSelectedPersonality(PersonalityStrategy personality, String petName) {
+    model.setPersonality(personality);
     model.setAllowTaskExecution();
-  }
+    // Update the pet image in the view
+    view.updatePetImage(petName);
+}
 
   /**
    * This method handles the feed action.
