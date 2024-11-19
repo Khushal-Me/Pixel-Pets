@@ -18,6 +18,11 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 500);
         setLocationRelativeTo(null);
+
+        // Initialize and start the music player
+        MusicPlayer musicPlayer = MusicPlayer.getInstance();
+        String musicFilePath = "/Users/ramjeuthayakumaar/Desktop/CS2212A/group07/MISC/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
+        musicPlayer.playMusic(musicFilePath);
         
         // Create main panel with a vertical box layout
         JPanel mainPanel = new JPanel();
@@ -46,11 +51,7 @@ public class MainMenu extends JFrame {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(exitButton);
 
-        // Initialize and start the music player
-        MusicPlayer musicPlayer = MusicPlayer.getInstance();
-        String musicFilePath = "~/MISC/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
-        musicPlayer.playMusic(musicFilePath);
-
+    
         // Add action listeners
         startGameButton.addActionListener(e -> startNewGame());
         //loadGameButton.addActionListener(e -> loadGame());

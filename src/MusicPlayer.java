@@ -1,10 +1,22 @@
 // MusicPlayer.java
-import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.*;
 
 public class MusicPlayer {
     private Clip clip;
+    private static MusicPlayer instance;
+    
+    private MusicPlayer() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static MusicPlayer getInstance() {
+        if (instance == null) {
+            instance = new MusicPlayer();
+        }
+        return instance;
+    }
 
     public void playMusic(String filePath) {
         try {
