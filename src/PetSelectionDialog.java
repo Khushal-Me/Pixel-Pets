@@ -15,7 +15,7 @@ public class PetSelectionDialog extends JDialog {
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JPanel petPanel = new JPanel();
-        petPanel.setLayout(new FlowLayout());
+        petPanel.setLayout(new GridLayout(1, 3, 10, 10)); // 1 row, 3 columns, with some horizontal and vertical gaps
 
         // Create buttons with images
         JButton dogButton = createPetButton("Dog", "res/dog.jpeg");
@@ -32,12 +32,17 @@ public class PetSelectionDialog extends JDialog {
 
         pack();
         setLocationRelativeTo(parent);
+
+        // Set a preferred size for the dialog
+        setPreferredSize(new Dimension(600, 600)); // Adjust as needed
+        pack();
+        setLocationRelativeTo(parent);
     }
 
     private JButton createPetButton(String petName, String imagePath) {
         ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
         // Scale the image
-        Image scaledImage = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         icon = new ImageIcon(scaledImage);
         JButton button = new JButton(petName, icon);
         button.setVerticalTextPosition(SwingConstants.BOTTOM);

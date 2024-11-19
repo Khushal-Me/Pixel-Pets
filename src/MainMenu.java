@@ -21,7 +21,7 @@ public class MainMenu extends JFrame {
 
         // Initialize and start the music player
         MusicPlayer musicPlayer = MusicPlayer.getInstance();
-        String musicFilePath = "/Users/ramjeuthayakumaar/Desktop/CS2212A/group07/MISC/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
+        String musicFilePath = "res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
         musicPlayer.playMusic(musicFilePath);
         
         // Create main panel with a vertical box layout
