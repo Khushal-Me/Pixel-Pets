@@ -10,6 +10,7 @@ public class MainMenu extends JFrame {
     private final JButton loadGameButton;
     private final JButton instructionsButton;
     private final JButton exitButton;
+    private MusicPlayer musicPlayer;
 
     public MainMenu() {
         // Basic frame setup
@@ -45,11 +46,19 @@ public class MainMenu extends JFrame {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(exitButton);
 
+        // Initialize and start the music player
+        MusicPlayer musicPlayer = MusicPlayer.getInstance();
+        String musicFilePath = "~/MISC/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
+        musicPlayer.playMusic(musicFilePath);
+
         // Add action listeners
         startGameButton.addActionListener(e -> startNewGame());
         //loadGameButton.addActionListener(e -> loadGame());
         instructionsButton.addActionListener(e -> showInstructions());
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+        MusicPlayer.getInstance().stopMusic(); // Stop the music
+        System.exit(0);
+    });
 
         // Add panel to frame
         add(mainPanel);
