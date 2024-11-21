@@ -43,13 +43,13 @@ public class PetView extends JFrame {
   private boolean hungerAlertShown = false;
   private boolean sleepAlertShown = false;
   private boolean socialAlertShown = false;
-  private boolean isDialogOpen = false;
-  private JLabel petImageLabel;
-  private JButton backButton; 
-  private DefaultListModel<String> inventoryListModel;
-  private JList<String> inventoryList;
-  private JButton useItemButton;
-  private JButton vetButton;
+  private final boolean isDialogOpen = false;
+  private final JLabel petImageLabel;
+  private final JButton backButton; 
+  private final DefaultListModel<String> inventoryListModel;
+  private final JList<String> inventoryList;
+  private final JButton useItemButton;
+  private final JButton vetButton;
 
 
   /**
