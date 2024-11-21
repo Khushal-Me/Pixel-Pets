@@ -2,7 +2,7 @@
 import java.io.Serializable;
 
 public abstract class Item implements Serializable {
-    private String name;
+    private final String name;
 
     public Item(String name) {
         this.name = name;

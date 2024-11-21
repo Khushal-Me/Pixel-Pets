@@ -42,7 +42,7 @@ public class MusicPlayer {
                 System.out.println("Cannot find the music file.");
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-            ex.printStackTrace();
+            System.err.println("An error occurred while playing music: " + ex.getMessage());
         }
     }
 

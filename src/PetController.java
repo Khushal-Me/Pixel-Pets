@@ -170,7 +170,7 @@ public class PetController {
     }
 
     // Restart the music to normal gameplay music
-    MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"); 
+    MusicPlayer.getInstance().changeMusic("src/res/Alive.wav"); 
     model.startItemGenerator();
     model.startTimer();
     Timer timer = new Timer();
@@ -223,7 +223,7 @@ public class PetController {
     view.appendMessage(model.getMessage());
     executorService.schedule(() -> {
       SwingUtilities.invokeLater(() -> {
-        view.appendMessage(model.getMessage()); // 一分钟后执行
+        view.appendMessage(model.getMessage());
         updateView();
       });
     }, 1, TimeUnit.MINUTES);
@@ -265,7 +265,7 @@ public class PetController {
       view.appendMessage(model.getMessage());
       executorService.schedule(() -> {
         SwingUtilities.invokeLater(() -> {
-          view.appendMessage("Your pet woke up!"); // 在一分钟后执行
+          view.appendMessage("Your pet woke up!"); 
           updateView();
         });
       }, 1, TimeUnit.MINUTES);
@@ -284,7 +284,7 @@ public class PetController {
     // Disable action buttons
     view.setActionButtonsEnabled(false);
     // Change the music to the dead state music
-    MusicPlayer.getInstance().changeMusic("res/etxrnall - your love is my drug (8bit slowed).wav");
+    MusicPlayer.getInstance().changeMusic("src/res/Dead.wav");
 
     Object[] options = {"End Game", "Restart"};
     int choice = JOptionPane.showOptionDialog(
@@ -315,7 +315,7 @@ public class PetController {
 
 
     // Change the music to the main menu music
-    MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"); // Replace with actual path
+    MusicPlayer.getInstance().changeMusic("src/res/Dead.wav"); // Replace with actual path
 
     // Show the main menu
     mainMenu.setVisible(true);

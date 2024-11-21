@@ -1,147 +1,142 @@
-/*Main Menu   */
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class MainMenu extends JFrame {
-    private final JButton startGameButton;
-    private final JButton loadGameButton;
-    private final JButton instructionsButton;
-    private final JButton exitButton;
-    private MusicPlayer musicPlayer;
 
+    private static MainMenu instance; // Singleton instance of MainMenu
+    private final MusicPlayer musicPlayer;
+    private boolean isMusicPlaying = false;  // Track if music is playing
+
+    // Private constructor to prevent multiple instances
     public MainMenu() {
-        // Basic frame setup
-        setTitle("Pixel Pets");
+        // Frame setup
+        setTitle("PixelPets");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 500);
+        setSize(800, 600);
+        setResizable(false);
+        setLayout(null); // Use absolute positioning
         setLocationRelativeTo(null);
 
-        // Initialize and start the music player
-        MusicPlayer musicPlayer = MusicPlayer.getInstance();
-        String musicFilePath = "res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav"; // Replace with your actual file path
-        musicPlayer.playMusic(musicFilePath);
-        
-        // Create main panel with a vertical box layout
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        // Initialize music player
+        musicPlayer = MusicPlayer.getInstance();
 
-        // Create title label
-        JLabel titleLabel = new JLabel("Pixel Pets");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Ensure music plays only once when the main menu is first opened
+        if (!isMusicPlaying) {
+            String musicFilePath = "src/res/Alive.wav"; // Replace with actual file path
+            musicPlayer.playMusic(musicFilePath);
+            isMusicPlaying = true;  // Music starts playing once
+        }
 
-        // Create buttons
-        startGameButton = createStyledButton("Start New Game");
-        loadGameButton = createStyledButton("Load Game");
-        instructionsButton = createStyledButton("Tutorial");
-        exitButton = createStyledButton("Exit");
+        // Title label
+        JLabel titleLabel = new JLabel("PixelPets");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setBounds(250, 50, 300, 60); // Position for title
+        add(titleLabel);
 
-        // Add components to panel with spacing
-        mainPanel.add(titleLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        mainPanel.add(startGameButton);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(loadGameButton);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(instructionsButton);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(exitButton);
+        // Buttons
+        JButton startGameButton = createStyledButton("Start New Game", 250, 150, 300, 50);
+        JButton loadGameButton = createStyledButton("Load Game", 250, 220, 300, 50);
+        JButton instructionsButton = createStyledButton("Instructions", 250, 290, 300, 50);
+        JButton parentalControlsButton = createStyledButton("Parental Controls", 250, 360, 300, 50);
+        JButton quitButton = createStyledButton("Quit Game", 600, 20, 150, 40);
 
-    
-        // Add action listeners
+        // Add buttons to the frame
+        add(startGameButton);
+        add(loadGameButton);
+        add(instructionsButton);
+        add(parentalControlsButton);
+        add(quitButton);
+
+        // Action listeners
         startGameButton.addActionListener(e -> startNewGame());
-        //loadGameButton.addActionListener(e -> loadGame());
-        instructionsButton.addActionListener(e -> showInstructions());
-        exitButton.addActionListener(e -> {
-        MusicPlayer.getInstance().stopMusic(); // Stop the music
-        System.exit(0);
-    });
+        loadGameButton.addActionListener(e -> loadGame());
+        instructionsButton.addActionListener(e -> openInstructionsPage());
+        parentalControlsButton.addActionListener(e -> openParentalControls());
+        quitButton.addActionListener(e -> System.exit(0)); // Quit the application
 
-        // Add panel to frame
-        add(mainPanel);
+        // Minimize the main menu when a new game starts
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Ensure music stops when quitting
+                musicPlayer.stopMusic();
+            }
+        });
     }
 
-    private JButton createStyledButton(String text) {
+    // Singleton pattern to ensure only one instance of MainMenu is created
+    public static MainMenu getInstance() {
+        if (instance == null) {
+            instance = new MainMenu();
+        }
+        return instance;
+    }
+
+    private JButton createStyledButton(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(200, 40));
-        button.setFont(new Font("Arial", Font.PLAIN, 14));
+        button.setFont(new Font("Arial", Font.PLAIN, 20));
+        button.setBorder(new LineBorder(Color.BLACK, 3)); // Bolder border
+        button.setBackground(Color.WHITE); // White background
+        button.setOpaque(true); // Ensures background color is applied
+        button.setFocusPainted(false); // Removes focus outline
+        button.setFocusable(false); // Ensures no blue outline when focused
+        button.setBounds(x, y, width, height); // Set size and position
+        button.setHorizontalAlignment(SwingConstants.CENTER); // Center-align text
+
+        // Add rollover effect
+        button.addChangeListener(e -> {
+            if (button.getModel().isRollover()) {
+                button.setBackground(new Color(220, 220, 220)); // Light gray on hover
+            } else {
+                button.setBackground(Color.WHITE); // White when not hovered
+            }
+        });
+
         return button;
     }
 
     private void startNewGame() {
-        //Change the music to normal gameplay music
-        MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav");
-        // Create model, view, and controller
-        Pet petModel = new Pet();
-        PetView gameView = new PetView();
-        PetController controller = new PetController(petModel, gameView, this);
+        setVisible(false); // Minimize the main menu
+        PetSelectionDialog petSelectionDialog = new PetSelectionDialog(this);
+        petSelectionDialog.setVisible(true); // Show pet selection dialog
 
-        // Hide the main menu
-        setVisible(false);
+        // The actual game start logic should now be handled in PetSelectionDialog
+    }
 
-        // Add listener to re-show the main menu when the game window closes
-        gameView.addWindowListener(new WindowAdapter() {
+    private void loadGame() {
+        JOptionPane.showMessageDialog(this, "Load Game feature is not implemented yet.");
+    }
+
+    private void openInstructionsPage() {
+        setVisible(false); // Hide the main menu
+        InstructionsPage instructionsPage = new InstructionsPage();
+        instructionsPage.setVisible(true); // Show instructions page
+        instructionsPage.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                setVisible(true);
-                gameView.dispose();
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                setVisible(true); // Re-show the main menu when instructions page closes
             }
         });
-
-        // Show the game window
-        gameView.setVisible(true);
     }
 
-    private void showInstructions() {
-        JOptionPane.showMessageDialog(this,
-            """
-            Welcome to Pixel Pets!
-
-            Game Instructions:
-            1. Choose your pet (Dog, Cat, Bird)
-
-            2. Take care of your pet by:
-               - Feeding when hungry
-               - Playing when lonely
-               - Letting it sleep when tired
-
-            3. Monitor your pet's stats:
-               - Health
-               - Hunger
-               - Social
-               - Sleep
-               - Mood
-
-            4. Pay attention to alerts and warnings
-            5. Different Pets have unique characteristics!
-
-            Keep your pet healthy and happy, if you want to prevent their inevitable death!
-            """,
-            "Game Instructions",
-            JOptionPane.INFORMATION_MESSAGE);
+    private void openParentalControls() {
+        JOptionPane.showMessageDialog(this, "Parental Controls feature is under construction!");
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
                 // Set system look and feel
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.err.println("Failed to set system look and feel: " + e.getMessage());
             }
-    
-            // Load saved pet or create a new one
-            Pet pet = Pet.load();
-    
-            // Start autosaving
-            pet.startAutosave();
-    
-            MainMenu mainMenu = new MainMenu();
+
+            // Launch the main menu
+            MainMenu mainMenu = MainMenu.getInstance(); // Get the single instance of MainMenu
             mainMenu.setVisible(true);
         });
     }

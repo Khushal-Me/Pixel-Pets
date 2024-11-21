@@ -222,24 +222,24 @@ public void notifyControllerOfPersonalityChoice(String petName) {
    */
 private PersonalityStrategy mapNameToPersonality(String petName) {
     PersonalityStrategy selectedPersonality;
-    switch (petName) {
-        case "Dog":
+    selectedPersonality = switch (petName) {
+        case "Dog" -> {
             messageArea.append("The Dog pet was selected.\n");
-            selectedPersonality = new Dog();
-            break;
-        case "Cat":
+            yield new Dog();
+        }
+        case "Cat" -> {
             messageArea.append("The Cat pet was selected.\n");
-            selectedPersonality = new Cat();
-            break;
-        case "Bird":
+            yield new Cat();
+        }
+        case "Bird" -> {
             messageArea.append("The Bird pet was selected.\n");
-            selectedPersonality = new Bird();
-            break;
-        default:
+            yield new Bird();
+        }
+        default -> {
             messageArea.append("The Bird pet was selected.\n");
-            selectedPersonality = new Bird();
-            break;
-    }
+            yield new Bird();
+        }
+    };
 
     return selectedPersonality;
 }
