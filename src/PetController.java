@@ -20,6 +20,9 @@ public class PetController {
   private Action previousPreferredAction = null;
   private boolean isFirstActionSet = true;
   private boolean deathHandled = false;
+  private long sessionStartTime; // Time when the session started
+  private int sessionPlayTime;   // Playtime accumulated in the current session (in minutes)
+
 
   /**
    * Constructor for the controller.
@@ -60,14 +63,23 @@ public class PetController {
     view.addPreferredActionListener(e -> getPreferredActionButton());
     view.addPerformPreferredActionListener(e -> performPreferredActionButton());
     view.addBackButtonListener(e -> handleBackToMainMenu()); // Add this line
-
     // Start the item generator
     model.startItemGenerator();
-
     // Add listener for use item button
     view.addUseItemListener(e -> handleUseItem());
     // Update inventory view periodically or whenever items are added
     updateInventoryView();
+    // Record the session start time
+    sessionStartTime = System.currentTimeMillis();
+    sessionPlayTime = 0; // Initialize session playtime
+    // Start a timer to check playtime restrictions
+    executorService.scheduleAtFixedRate(this::checkPlayTimeRestriction, 1, 1, TimeUnit.MINUTES);
+    // Update inventory view periodically or whenever items are added
+    updateInventoryView();
+    // Schedule a task to update the inventory every few seconds
+    executorService.scheduleAtFixedRate(() -> {
+    SwingUtilities.invokeLater(this::updateInventoryView);
+    }, 0, 5, TimeUnit.SECONDS);
 }
 
   /**
@@ -286,7 +298,7 @@ public class PetController {
     // Change the music to the dead state music
     MusicPlayer.getInstance().changeMusic("src/res/Dead.wav");
 
-    Object[] options = {"End Game", "Restart"};
+    Object[] options = {"End Game", "Restart", "Revive"};
     int choice = JOptionPane.showOptionDialog(
         view,
         "Your pet has died. What would you like to do?",
@@ -304,21 +316,26 @@ public class PetController {
       view.appendMessage("Game Over");
     } else if (choice == JOptionPane.NO_OPTION) {
       restartGame();
-    }
+    } else if (choice == JOptionPane.CANCEL_OPTION) {
+      handleRevivePet();
+  }
   }
   public void handleBackToMainMenu() {
-    model.stopItemGenerator();
     // Perform any necessary cleanup
+    model.stopItemGenerator();
     model.save(); // Save the game state if needed
     model.stopTimers(); // We'll implement this method to stop timers
+    executorService.shutdownNow(); // Stop controller's executor service
     view.dispose(); // Close the game window
-
-
+    // Update total playtime
+    long elapsedTime = (System.currentTimeMillis() - sessionStartTime) / 60000; // In minutes
+    int sessionPlayTime = (int) elapsedTime;
+    mainMenu.incrementTotalPlayTime(sessionPlayTime);
     // Change the music to the main menu music
     MusicPlayer.getInstance().changeMusic("src/res/Dead.wav"); // Replace with actual path
-
     // Show the main menu
     mainMenu.setVisible(true);
+
 }
 
 private void updateInventoryView() {
@@ -343,4 +360,48 @@ private void updateInventoryView() {
       updateView();
       view.appendMessage("You took your pet to the vet. Health increased by 30.");
   }
+  private void handleRevivePet() {
+    String password = JOptionPane.showInputDialog(view, "Enter parental password to revive the pet:", "Revive Pet", JOptionPane.WARNING_MESSAGE);
+    if (password != null && password.equals("CS2212A")) {
+        model.revive();
+        view.setActionButtonsEnabled(true);
+        view.updatePetImage(model.getPetName(), false); // Update to alive image
+        MusicPlayer.getInstance().changeMusic("src/res/Alive.wav"); // Switch back to normal music
+        deathHandled = false; // Reset death handling
+        view.appendMessage("Your pet has been revived!");
+        // Restart any necessary timers or services
+        model.startTimer();
+    } else {
+        JOptionPane.showMessageDialog(view, "Incorrect password. Unable to revive the pet.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        // Re-show the death options
+        handlePetDeath();
+    }
+}
+private void checkPlayTimeRestriction() {
+    sessionPlayTime++; // Increment session playtime by 1 minute
+    int totalPlayTime = mainMenu.getTotalPlayTime() + sessionPlayTime;
+
+  if (totalPlayTime >= mainMenu.getPlayTimeRestriction()) {
+      // Enforce playtime restriction
+      SwingUtilities.invokeLater(() -> {
+          JOptionPane.showMessageDialog(view, "Playtime limit reached. The game will now exit.", "Playtime Limit", JOptionPane.WARNING_MESSAGE);
+          exitGameDueToPlayTimeLimit();
+      });
+  }
+}
+
+private void exitGameDueToPlayTimeLimit() {
+  // Save the game state if necessary
+  model.save();
+  // Update the total playtime in MainMenu
+  mainMenu.incrementTotalPlayTime(sessionPlayTime);
+  model.stopTimers(); // Stop all timers
+  // Stop any executors in the controller
+  executorService.shutdownNow();
+  // Dispose the game view and return to main menu
+  view.dispose();
+  // Change the music to the main menu music
+  MusicPlayer.getInstance().changeMusic("src/res/Alive.wav");
+  mainMenu.setVisible(true);
+}
 }

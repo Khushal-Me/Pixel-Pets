@@ -14,43 +14,33 @@ import java.util.concurrent.TimeUnit;
  * This class represents a pet.
  */
 public class Pet implements PetModel, Serializable {
-  
   private static final long serialVersionUID = 1L;
-
   private static final String SAVE_FILE = "pet_save.dat";
-
   private transient ScheduledExecutorService autosaveService;
-
   private int hunger;
   private int social;
   private int sleep;
   private int health;
   private Inventory inventory;
-
   // Mark transient fields that cannot be serialized
   private transient TimeSimulator timeSimulator;
   private transient ScheduledExecutorService executorService1;
   private transient ScheduledExecutorService executorService2;
-
   private Mood mood;
   private PersonalityStrategy personality;
   private Action preferredAction;
-
   private long lastInteractedTime;
-
   private int checkCount = 0;  // Counter to track the number of checks
   private boolean isSleeping;
   /*private final TimeSimulator timeSimulator;
   private ScheduledExecutorService executorService1;
   private ScheduledExecutorService executorService2; */
   private boolean personalitySet = false;
-
   private String message;
-
   private boolean isDead = false;
   private boolean allowTaskExecution = false;
-
   private transient ScheduledExecutorService itemGeneratorService;
+
 
 
   /**
@@ -65,6 +55,7 @@ public class Pet implements PetModel, Serializable {
     inventory = new Inventory();
 
     timeSimulator = new TimeSimulator(this);
+    timeSimulator.startAttributeUpdates();
     lastInteractedTime = System.currentTimeMillis();
     executorService1 = Executors.newScheduledThreadPool(1);
     startItemGenerator();
@@ -608,16 +599,20 @@ public class Pet implements PetModel, Serializable {
         }
   }
 
-  private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        
+  private void readObject(java.io.ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
         // Reinitialize transient fields
         timeSimulator = new TimeSimulator(this);
+        timeSimulator.startAttributeUpdates();
         executorService1 = Executors.newScheduledThreadPool(1);
         startTimer(); // Restart the timer
         startItemGenerator();
+
     }
   public void stopTimers() {
+      if (timeSimulator != null) {
+          timeSimulator.stopAttributeUpdates();
+    }
       if (executorService1 != null && !executorService1.isShutdown()) {
           executorService1.shutdownNow();
       }
@@ -630,6 +625,9 @@ public class Pet implements PetModel, Serializable {
           autosaveService.shutdownNow();
       }
       // Stop any other services or threads
+      if (itemGeneratorService != null && !itemGeneratorService.isShutdown()) {
+        itemGeneratorService.shutdownNow();
+    }
   }
   private String petName;
 
@@ -682,4 +680,30 @@ public void receiveGift() {
 public void increaseHealth(int amount) {
   health = Math.min(health + amount, 100);
 }
+// Add this method to reinitialize services after revival
+public void reinitializeServices() {
+  if (timeSimulator == null) {
+    timeSimulator = new TimeSimulator(this);
+    timeSimulator.startAttributeUpdates();
+  }
+  startItemGenerator(); // Restart item generator
+}
+public void revive() {
+  if (isDead) {
+      health = 100;
+      hunger = 20; // Reset hunger to a reasonable level
+      social = 80; // Reset social to a reasonable level
+      sleep = 20;  // Reset sleep to a reasonable level
+      mood = Mood.HAPPY;
+      isDead = false;
+      lastInteractedTime = System.currentTimeMillis();
+      // Reinitialize any necessary transient fields
+      startTimer();
+      startItemGenerator();
+      // Reset messages or other state variables
+      message = "Your pet has been revived!";
+      reinitializeServices();
+  }
+}
+
 }

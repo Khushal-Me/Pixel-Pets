@@ -459,7 +459,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     if (!hungerAlertShown) {
       Object[] options = {"Feed", "Dismiss"};
       int choice = JOptionPane.showOptionDialog(
-          null,
+          this, // Use 'this' to tie the dialog to the game window
           "Your pet is hungry!",
           "Hunger Alert",
           JOptionPane.YES_NO_OPTION,
@@ -483,7 +483,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     if (!socialAlertShown) {
       Object[] options = {"Play", "Dismiss"};
       int choice = JOptionPane.showOptionDialog(
-          null,
+          this, // Use 'this' to tie the dialog to the game window
           "Your pet is lonely!",
           "Social Alert",
           JOptionPane.YES_NO_OPTION,
@@ -507,7 +507,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     if (!sleepAlertShown) {
       Object[] options = {"Sleep", "Dismiss"};
       int choice = JOptionPane.showOptionDialog(
-          null,
+          this, // Parent the dialog to the game window,
           "Your pet is sleepy!",
           "Sleep Alert",
           JOptionPane.YES_NO_OPTION,

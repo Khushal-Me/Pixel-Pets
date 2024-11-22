@@ -8,6 +8,9 @@ public class MainMenu extends JFrame {
     private static MainMenu instance; // Singleton instance of MainMenu
     private final MusicPlayer musicPlayer;
     private boolean isMusicPlaying = false;  // Track if music is playing
+    private int playTimeRestriction = Integer.MAX_VALUE; // Default to no restriction
+    private int totalPlayTime = 0; // In minutes
+    private Settings settings;
 
     // Private constructor to prevent multiple instances
     public MainMenu() {
@@ -18,6 +21,8 @@ public class MainMenu extends JFrame {
         setResizable(false);
         setLayout(null); // Use absolute positioning
         setLocationRelativeTo(null);
+
+        settings = new Settings();
 
         // Initialize music player
         musicPlayer = MusicPlayer.getInstance();
@@ -102,7 +107,6 @@ public class MainMenu extends JFrame {
         setVisible(false); // Minimize the main menu
         PetSelectionDialog petSelectionDialog = new PetSelectionDialog(this);
         petSelectionDialog.setVisible(true); // Show pet selection dialog
-
         // The actual game start logic should now be handled in PetSelectionDialog
     }
 
@@ -123,7 +127,7 @@ public class MainMenu extends JFrame {
     }
 
     private void openParentalControls() {
-        JOptionPane.showMessageDialog(this, "Parental Controls feature is under construction!");
+        new ParentalControlsDialog(this);
     }
 
     public static void main(String[] args) {
@@ -139,5 +143,21 @@ public class MainMenu extends JFrame {
             MainMenu mainMenu = MainMenu.getInstance(); // Get the single instance of MainMenu
             mainMenu.setVisible(true);
         });
+    }
+    public int getPlayTimeRestriction() {
+        return settings.getPlayTimeRestriction();
+    }
+    
+    public void setPlayTimeRestriction(int restriction) {
+        settings.setPlayTimeRestriction(restriction);
+    }
+    
+    public int getTotalPlayTime() {
+        return settings.getTotalPlayTime();
+    }
+    
+    public void incrementTotalPlayTime(int minutes) {
+        int newTotal = getTotalPlayTime() + minutes;
+        settings.setTotalPlayTime(newTotal);
     }
 }

@@ -24,6 +24,7 @@ public class MusicPlayer {
     }
 
     public void playMusic(String filePath) {
+        System.out.println("Attempting to play music: " + filePath);
         try {
             // Open an audio input stream.
             File musicPath = new File(filePath);
@@ -47,6 +48,7 @@ public class MusicPlayer {
     }
 
     public void stopMusic() {
+        System.out.println("Stopping music.");
         if (clip != null && clip.isRunning()) {
             clip.stop();
             clip.close();
