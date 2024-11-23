@@ -7,7 +7,6 @@ public class ParentalControlsDialog extends JDialog {
     private JLabel playTimeLabel;
     private JLabel totalPlayTimeLabel;
     private final MainMenu mainMenu;
-    private int playTimeRestriction; // In minutes
 
     public ParentalControlsDialog(MainMenu mainMenu) {
         super(mainMenu, "Parental Controls", true);

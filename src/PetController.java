@@ -20,7 +20,7 @@ public class PetController {
   private Action previousPreferredAction = null;
   private boolean isFirstActionSet = true;
   private boolean deathHandled = false;
-  private long sessionStartTime; // Time when the session started
+  private final long sessionStartTime; // Time when the session started
   private int sessionPlayTime;   // Playtime accumulated in the current session (in minutes)
 
 
@@ -310,14 +310,16 @@ public class PetController {
         options[0]
     );
 
-    if (choice == JOptionPane.YES_OPTION) {
+  switch (choice) {
+    case JOptionPane.YES_OPTION -> {
       view.toggleAttributesVisibility(true);
       view.toggleButtonsAvailability(false);
       view.appendMessage("Game Over");
-    } else if (choice == JOptionPane.NO_OPTION) {
-      restartGame();
-    } else if (choice == JOptionPane.CANCEL_OPTION) {
-      handleRevivePet();
+    }
+    case JOptionPane.NO_OPTION -> restartGame();
+    case JOptionPane.CANCEL_OPTION -> handleRevivePet();
+    default -> {
+    }
   }
   }
   public void handleBackToMainMenu() {
@@ -329,7 +331,7 @@ public class PetController {
     view.dispose(); // Close the game window
     // Update total playtime
     long elapsedTime = (System.currentTimeMillis() - sessionStartTime) / 60000; // In minutes
-    int sessionPlayTime = (int) elapsedTime;
+    sessionPlayTime += elapsedTime; // Update session playtime with elapsed time
     mainMenu.incrementTotalPlayTime(sessionPlayTime);
     // Change the music to the main menu music
     MusicPlayer.getInstance().changeMusic("src/res/Dead.wav"); // Replace with actual path

@@ -8,9 +8,7 @@ public class MainMenu extends JFrame {
     private static MainMenu instance; // Singleton instance of MainMenu
     private final MusicPlayer musicPlayer;
     private boolean isMusicPlaying = false;  // Track if music is playing
-    private int playTimeRestriction = Integer.MAX_VALUE; // Default to no restriction
-    private int totalPlayTime = 0; // In minutes
-    private Settings settings;
+    private final Settings settings;
 
     // Private constructor to prevent multiple instances
     public MainMenu() {
@@ -127,7 +125,8 @@ public class MainMenu extends JFrame {
     }
 
     private void openParentalControls() {
-        new ParentalControlsDialog(this);
+        ParentalControlsDialog parentalControlsDialog = new ParentalControlsDialog(this);
+        parentalControlsDialog.setVisible(true);
     }
 
     public static void main(String[] args) {
