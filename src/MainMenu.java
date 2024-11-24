@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.concurrent.TimeUnit;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -56,6 +59,15 @@ public class MainMenu extends JFrame {
         // Action listeners
         startGameButton.addActionListener(e -> startNewGame());
         loadGameButton.addActionListener(e -> loadGame());
+        instructionsButton.addActionListener(e -> showInstructions());
+        exitButton.addActionListener(e -> {
+        MusicPlayer.getInstance().stopMusic(); // Stop the music
+        System.exit(0);
+    });
+
+        // Add panel to frame
+        add(mainPanel);
+        loadGameButton.addActionListener(e -> loadGame());
         instructionsButton.addActionListener(e -> openInstructionsPage());
         parentalControlsButton.addActionListener(e -> openParentalControls());
         quitButton.addActionListener(e -> System.exit(0)); // Quit the application
@@ -102,6 +114,18 @@ public class MainMenu extends JFrame {
     }
 
     private void startNewGame() {
+        // Change the music to normal gameplay music
+        MusicPlayer.getInstance().changeMusic("res/AdhesiveWombat - Night Shade  NO COPYRIGHT 8-bit Music.wav");
+        // Create model, view, and controller
+        Pet petModel = new Pet();
+        PetView gameView = new PetView();
+        PetController controller = new PetController(petModel, gameView, this, true); // Pass true for a new game
+    
+        // Hide the main menu
+        setVisible(false);
+    
+        // Add listener to re-show the main menu when the game window closes
+        gameView.addWindowListener(new WindowAdapter() {
         setVisible(false); // Minimize the main menu
         PetSelectionDialog petSelectionDialog = new PetSelectionDialog(this);
         petSelectionDialog.setVisible(true); // Show pet selection dialog
@@ -118,6 +142,75 @@ public class MainMenu extends JFrame {
         instructionsPage.setVisible(true); // Show instructions page
         instructionsPage.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
+            public void windowClosing(WindowEvent e) {
+                setVisible(true);
+                gameView.dispose();
+            }
+        });
+    
+        // Show the game window
+        gameView.setVisible(true);
+    }
+
+    private void loadGame() {
+        String slot = JOptionPane.showInputDialog(this, "Enter load slot (1, 2, or 3):");
+        if (slot != null && !slot.isEmpty()) {
+            Pet petModel = Pet.load(slot);
+            if (petModel != null) {
+                petModel.startAutoSave(slot, 5, TimeUnit.MINUTES);
+                PetView gameView = new PetView();
+                PetController controller = new PetController(petModel, gameView, this, false); // Pass false for loading a game
+    
+                // Hide the main menu
+                setVisible(false);
+    
+                // Add listener to re-show the main menu when the game window closes
+                gameView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        setVisible(true);
+                        gameView.dispose();
+                    }
+                });
+    
+                // Show the game window
+                gameView.setVisible(true);
+    
+                // Display success message
+                JOptionPane.showMessageDialog(gameView, "Game loaded successfully.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to load game from slot " + slot, "Load Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void showInstructions() {
+        JOptionPane.showMessageDialog(this,
+            """
+            Welcome to Pixel Pets!
+
+            Game Instructions:
+            1. Choose your pet (Dog, Cat, Bird)
+
+            2. Take care of your pet by:
+               - Feeding when hungry
+               - Playing when lonely
+               - Letting it sleep when tired
+
+            3. Monitor your pet's stats:
+               - Health
+               - Hunger
+               - Social
+               - Sleep
+               - Mood
+
+            4. Pay attention to alerts and warnings
+            5. Different Pets have unique characteristics!
+
+            Keep your pet healthy and happy, if you want to prevent their inevitable death!
+            """,
+            "Game Instructions",
+            JOptionPane.INFORMATION_MESSAGE);
             public void windowClosing(java.awt.event.WindowEvent e) {
                 setVisible(true); // Re-show the main menu when instructions page closes
             }
@@ -137,6 +230,17 @@ public class MainMenu extends JFrame {
             } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.err.println("Failed to set system look and feel: " + e.getMessage());
             }
+
+            // Specify the save slot
+            String slot = "1"; // You can change this to any slot you want to use
+
+            // Load saved pet or create a new one
+            Pet pet = Pet.load(slot);
+
+            // Start autosaving
+            pet.startAutoSave(slot, 5, TimeUnit.MINUTES);
+
+            MainMenu mainMenu = new MainMenu();
 
             // Launch the main menu
             MainMenu mainMenu = MainMenu.getInstance(); // Get the single instance of MainMenu

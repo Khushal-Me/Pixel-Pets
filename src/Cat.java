@@ -1,7 +1,10 @@
+import java.io.Serializable;
+
 /**
  * The class represents a cat.
  */
-public class Cat implements PersonalityStrategy {
+public class Cat implements PersonalityStrategy, Serializable {
+  private static final long serialVersionUID = 1L;
 
   /**
    * This method adjusts the behavior of the pet based on its personality.

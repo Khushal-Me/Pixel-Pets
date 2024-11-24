@@ -15,7 +15,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class Pet implements PetModel, Serializable {
   private static final long serialVersionUID = 1L;
-  private static final String SAVE_FILE = "pet_save.dat";
+
+  private static final String SAVE_FILE_PREFIX = "pet_save_";
+
   private transient ScheduledExecutorService autosaveService;
   private int hunger;
   private int social;
@@ -26,6 +28,7 @@ public class Pet implements PetModel, Serializable {
   private transient TimeSimulator timeSimulator;
   private transient ScheduledExecutorService executorService1;
   private transient ScheduledExecutorService executorService2;
+  private transient ScheduledExecutorService autoSaveExecutor;
   private Mood mood;
   private PersonalityStrategy personality;
   private Action preferredAction;
@@ -567,36 +570,46 @@ public class Pet implements PetModel, Serializable {
 /*
  * auto save class
  */
-  public void startAutosave() {
-    autosaveService = Executors.newScheduledThreadPool(1);
-    autosaveService.scheduleAtFixedRate(this::save, 10, 10, TimeUnit.MINUTES); // Autosave every 10 minutes
+public void startAutoSave(String slot, long interval, TimeUnit unit) {
+  if (autoSaveExecutor != null) {
+      autoSaveExecutor.shutdownNow();
+  }
+  autoSaveExecutor = Executors.newScheduledThreadPool(1);
+  autoSaveExecutor.scheduleAtFixedRate(() -> save(slot), interval, interval, unit);
 }
+
+public void stopAutoSave() {
+  if (autoSaveExecutor != null) {
+      autoSaveExecutor.shutdownNow();
+  }
+}
+ 
 
 
   /**
      * Save the pet's state to a file.
   */
-  public void save() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_FILE))) {
-            out.writeObject(this);
-            System.out.println("Pet saved successfully.");
-        } catch (IOException e) {
-            System.err.println("Error saving pet: " + e.getMessage());
-        }
-  }
+  public void save(String slot) {
+    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_FILE_PREFIX + slot + ".dat"))) {
+        out.writeObject(this);
+        System.out.println("Game saved successfully.");
+    } catch (IOException e) {
+        System.err.println("Error saving game: " + e.getMessage());
+    }
+}
 
       /**
      * Load the pet's state from a file.
      *
      * @return the loaded Pet object
      */
-  public static Pet load() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_FILE))) {
-            return (Pet) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading pet: " + e.getMessage());
-            return new Pet(); // Return a new Pet object if loading fails
-        }
+    public static Pet load(String slot) {
+      try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_FILE_PREFIX + slot + ".dat"))) {
+          return (Pet) in.readObject();
+      } catch (IOException | ClassNotFoundException e) {
+          System.err.println("Error loading game: " + e.getMessage());
+          return new Pet(); // Return a new Pet object if loading fails
+      }
   }
 
   private void readObject(java.io.ObjectInputStream ois) throws IOException, ClassNotFoundException {
@@ -609,6 +622,7 @@ public class Pet implements PetModel, Serializable {
         startItemGenerator();
 
     }
+    
   public void stopTimers() {
       if (timeSimulator != null) {
           timeSimulator.stopAttributeUpdates();
@@ -679,6 +693,23 @@ public void receiveGift() {
 }
 public void increaseHealth(int amount) {
   health = Math.min(health + amount, 100);
+}
+
+public void updateFrom(Pet other) {
+  this.hunger = other.hunger;
+  this.social = other.social;
+  this.sleep = other.sleep;
+  this.health = other.health;
+  this.inventory = other.inventory;
+  this.mood = other.mood;
+  this.personality = other.personality;
+  this.preferredAction = other.preferredAction;
+  this.lastInteractedTime = other.lastInteractedTime;
+  this.isSleeping = other.isSleeping;
+  this.message = other.message;
+  this.isDead = other.isDead;
+  this.allowTaskExecution = other.allowTaskExecution;
+  // Add any other fields that need to be updated
 }
 // Add this method to reinitialize services after revival
 public void reinitializeServices() {

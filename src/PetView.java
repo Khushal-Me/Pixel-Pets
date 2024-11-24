@@ -50,6 +50,7 @@ public class PetView extends JFrame {
   private final JList<String> inventoryList;
   private final JButton useItemButton;
   private final JButton vetButton;
+  private JButton saveButton;
 
 
   /**
@@ -79,16 +80,14 @@ public class PetView extends JFrame {
     sleepLabel = new JLabel("Sleep:");
     moodLabel = new JLabel("Mood:");
     lastInteractedLabel = new JLabel("Last Interaction: ");
-
-    //saveButton = new JButton("Save Game");
     feedButton = new JButton("Feed");
     playButton = new JButton("Play");
     sleepButton = new JButton("Sleep");
     getPreferredActionButton = new JButton("Get Preferred Action");
     performPreferredActionButton = new JButton("Perform Preferred Action");
     backButton = new JButton("Back to Main Menu");
-    //saveButton.addActionListener(e -> saveGame());
-    //add(saveButton, BorderLayout.SOUTH);
+    saveButton = new JButton("Save Game");
+    add(saveButton, BorderLayout.SOUTH);
 
    // Inventory Panel
    inventoryListModel = new DefaultListModel<>();
@@ -126,6 +125,7 @@ public class PetView extends JFrame {
     panel.add(backButton);
     panel.add(getPreferredActionButton);
     panel.add(performPreferredActionButton);
+    panel.add(saveButton);
 
     panel.add(inventoryPanel);
 
@@ -202,6 +202,11 @@ public void setController(PetController controller) {
 public void addBackButtonListener(ActionListener listener) {
     backButton.addActionListener(listener);
 }
+
+public void addSaveListener(ActionListener saveListener) {
+    saveButton.addActionListener(saveListener);
+}
+
 
 
   /**
@@ -635,4 +640,21 @@ public void updateInventory(List<Item> items) {
     public void addVetButtonListener(ActionListener listener) {
       vetButton.addActionListener(listener);
   }
+
+  public void updateViewWithModel(Pet model) {
+    updateHealth(model.getHealth());
+    updateHunger(model.getHunger());
+    updateSocial(model.getSocial());
+    updateSleep(model.getSleep());
+    updateMood(model.getMood().toString());
+    updatePersonality(model.getPersonality() != null ? model.getPersonality().getClass().getSimpleName() : "No Personality Set");
+    updateLastInteractedTime(model.getLastInteractedTime());
+    updateInventory(model.getInventory().getItems());
+    updatePetImage(model.getPetName(), false); // Ensure the pet image is updated
+    setActionButtonsEnabled(true);
+    toggleAttributesVisibility(true);
+    toggleButtonsVisibility(true);
+    togglePersonalitySelection(false);
+  }
+
 }

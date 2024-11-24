@@ -30,17 +30,23 @@ public class PetController {
    * @param model the model
    * @param view  the view
    */
-  public PetController(Pet model, PetView view, MainMenu mainMenu) {
+  public PetController(Pet model, PetView view, MainMenu mainMenu, boolean isNewGame) {
     this.model = model;
     this.view = view;
     this.mainMenu = mainMenu;
 
     view.setController(this);
+    view.addSaveListener(e -> handleSaveAction());
     view.addVetButtonListener(e -> handleVetAction());
+    view.addUseItemListener(e -> handleUseItem());
 
-    view.displayPetSelectionDialog();
-    if (model.getPersonality() != null) {
-      model.setAllowTaskExecution();
+    if (isNewGame) {
+        view.displayPetSelectionDialog();
+        if (model.getPersonality() != null) {
+            model.setAllowTaskExecution();
+        }
+    } else {
+        view.updateViewWithModel(model); // Update the view with the model's state
     }
 
     model.startTimer();
@@ -48,13 +54,13 @@ public class PetController {
 
     // Schedule a task for periodic view updates
     timer.scheduleAtFixedRate(new TimerTask() {
-      @Override
-      public void run() {
-        if (model.checkDeath()) {
-          timer.cancel();
+        @Override
+        public void run() {
+            if (model.checkDeath()) {
+                timer.cancel();
+            }
+            updateView();
         }
-        updateView();
-      }
     }, 0, 5000);
 
     view.addFeedListener(e -> handleFeedAction());
@@ -62,13 +68,11 @@ public class PetController {
     view.addSleepListener(e -> handleSleepAction());
     view.addPreferredActionListener(e -> getPreferredActionButton());
     view.addPerformPreferredActionListener(e -> performPreferredActionButton());
-    view.addBackButtonListener(e -> handleBackToMainMenu()); // Add this line
+    view.addBackButtonListener(e -> handleBackToMainMenu());
     // Start the item generator
     model.startItemGenerator();
-    // Add listener for use item button
-    view.addUseItemListener(e -> handleUseItem());
     // Update inventory view periodically or whenever items are added
-    updateInventoryView();
+    updateView();
     // Record the session start time
     sessionStartTime = System.currentTimeMillis();
     sessionPlayTime = 0; // Initialize session playtime
@@ -93,11 +97,10 @@ public class PetController {
     view.updateMood(model.getMood().toString());
 
     PersonalityStrategy personality = model.getPersonality();
-
     if (personality != null) {
-      view.updatePersonality(personality.getClass().getSimpleName());
+        view.updatePersonality(personality.getClass().getSimpleName());
     } else {
-      view.updatePersonality("No Personality Set");
+        view.updatePersonality("No Personality Set");
     }
 
     long lastInteractedTime = model.getLastInteractedTime();
@@ -107,28 +110,14 @@ public class PetController {
     checkForPreferredActionChange();
 
     if (model.checkDeath()) {
-      deathHandled = true;
-      handlePetDeath();
+        deathHandled = true;
+        handlePetDeath();
     } else {
-      if (model.getHunger() > 60) {
-        view.displayHungerAlert();
-      } else {
-        view.resetHungerAlert();
-      }
-
-      if (model.getSocial() < 40) {
-        view.displaySocialAlert();
-      } else {
-        view.resetSocialAlert();
-      }
-
-      if (model.getSleep() > 60) {
-        view.displaySleepAlert();
-      } else {
-        view.resetSleepAlert();
-      }
+        if (model.getHunger() > 60) {
+            view.displayHungerAlert();
+        }
     }
-  }
+}
 
   /**
    * This method updates the health status of the pet.
@@ -324,9 +313,12 @@ public class PetController {
   }
   public void handleBackToMainMenu() {
     // Perform any necessary cleanup
-    model.stopItemGenerator();
-    model.save(); // Save the game state if needed
-    model.stopTimers(); // We'll implement this method to stop timers
+    String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+    if (slot != null && !slot.isEmpty()) {
+        model.stopItemGenerator();
+    model.save(slot); // Save the game state with the specified slot
+    }
+    model.stopTimers(); // Stop timers
     executorService.shutdownNow(); // Stop controller's executor service
     view.dispose(); // Close the game window
     // Update total playtime
@@ -406,4 +398,17 @@ private void exitGameDueToPlayTimeLimit() {
   MusicPlayer.getInstance().changeMusic("src/res/Alive.wav");
   mainMenu.setVisible(true);
 }
+
+  private void handleSaveAction() {
+    String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+    if (slot != null && !slot.isEmpty()) {
+        model.save(slot);
+        JOptionPane.showMessageDialog(view, "Game saved successfully.");
+    }
 }
+
+
+}
+
+
+

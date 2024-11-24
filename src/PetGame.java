@@ -14,7 +14,7 @@ public class PetGame {
     MainMenu mainMenu = new MainMenu();
     mainMenu.setVisible(false); // We don't need to show it immediately
 
-    PetController controller = new PetController(model, view, mainMenu);
+    PetController controller = new PetController(model, view, mainMenu, true);
 
     view.setController(controller);
     view.setVisible(true);

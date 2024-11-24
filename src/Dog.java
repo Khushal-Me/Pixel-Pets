@@ -1,7 +1,11 @@
+
+import java.io.Serializable;
+
 /**
  * The class that represents a happy personality.
  */
-public class Dog implements PersonalityStrategy {
+public class Dog implements PersonalityStrategy, Serializable {
+  private static final long serialVersionUID = 1L;
   /**
    * The method that adjusts the behavior of the pet.
    *
