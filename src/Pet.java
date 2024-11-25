@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class Pet implements PetModel, Serializable {
   private static final long serialVersionUID = 1L;
 
-  private static final String SAVE_FILE_PREFIX = "pet_save_";
+  private static final String SAVE_FILE_PREFIX = "saves/pet_save_";
 
   private transient ScheduledExecutorService autosaveService;
   private int hunger;
@@ -35,9 +36,6 @@ public class Pet implements PetModel, Serializable {
   private long lastInteractedTime;
   private int checkCount = 0;  // Counter to track the number of checks
   private boolean isSleeping;
-  /*private final TimeSimulator timeSimulator;
-  private ScheduledExecutorService executorService1;
-  private ScheduledExecutorService executorService2; */
   private boolean personalitySet = false;
   private String message;
   private boolean isDead = false;
@@ -590,7 +588,16 @@ public void stopAutoSave() {
      * Save the pet's state to a file.
   */
   public void save(String slot) {
-    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_FILE_PREFIX + slot + ".dat"))) {
+    // Ensure the saves directory exists
+    File savesDir = new File("saves");
+    if (!savesDir.exists()) {
+        savesDir.mkdirs();
+    }
+
+    // Construct the file path
+    String filePath = SAVE_FILE_PREFIX + slot + ".dat";
+
+    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
         out.writeObject(this);
         System.out.println("Game saved successfully.");
     } catch (IOException e) {
@@ -604,7 +611,10 @@ public void stopAutoSave() {
      * @return the loaded Pet object
      */
     public static Pet load(String slot) {
-      try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_FILE_PREFIX + slot + ".dat"))) {
+      // Construct the file path
+      String filePath = SAVE_FILE_PREFIX + slot + ".dat";
+
+      try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
           return (Pet) in.readObject();
       } catch (IOException | ClassNotFoundException e) {
           System.err.println("Error loading game: " + e.getMessage());
@@ -612,16 +622,15 @@ public void stopAutoSave() {
       }
   }
 
-  private void readObject(java.io.ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        ois.defaultReadObject();
-        // Reinitialize transient fields
-        timeSimulator = new TimeSimulator(this);
-        timeSimulator.startAttributeUpdates();
-        executorService1 = Executors.newScheduledThreadPool(1);
-        startTimer(); // Restart the timer
-        startItemGenerator();
-
-    }
+  private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+    ois.defaultReadObject();
+    // Reinitialize transient fields
+    timeSimulator = new TimeSimulator(this);
+    timeSimulator.startAttributeUpdates();
+    executorService1 = Executors.newScheduledThreadPool(1);
+    startTimer(); // Restart the timer
+    startItemGenerator();
+}
     
   public void stopTimers() {
       if (timeSimulator != null) {
