@@ -160,8 +160,7 @@ public class MainMenu extends JFrame {
         if (petModel != null) {
             petModel.startAutoSave(slot, 5, TimeUnit.MINUTES);
             PetView gameView = new PetView();
-            PetController controller = new PetController(petModel, gameView, this, false); // Pass false for loading a game
-    
+            
             // Hide the main menu
             setVisible(false);
     
@@ -176,12 +175,15 @@ public class MainMenu extends JFrame {
     
             // Show the game window
             gameView.setVisible(true);
-    
+            
+            
             // Display success message
             JOptionPane.showMessageDialog(gameView, "Game loaded successfully.");
+            PetController controller = new PetController(petModel, gameView, this, false); // Pass false for loading a game
         } else {
             JOptionPane.showMessageDialog(this, "Save file doesn't exist.", "Load Error", JOptionPane.ERROR_MESSAGE);
         }
+            
     }
 
 
