@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.TimeUnit;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -58,15 +57,6 @@ public class MainMenu extends JFrame {
 
         // Action listeners
         startGameButton.addActionListener(e -> startNewGame());
-        loadGameButton.addActionListener(e -> loadGame());
-        instructionsButton.addActionListener(e -> showInstructions());
-        exitButton.addActionListener(e -> {
-        MusicPlayer.getInstance().stopMusic(); // Stop the music
-        System.exit(0);
-    });
-
-        // Add panel to frame
-        add(mainPanel);
         loadGameButton.addActionListener(e -> loadGame());
         instructionsButton.addActionListener(e -> openInstructionsPage());
         parentalControlsButton.addActionListener(e -> openParentalControls());
@@ -126,21 +116,6 @@ public class MainMenu extends JFrame {
     
         // Add listener to re-show the main menu when the game window closes
         gameView.addWindowListener(new WindowAdapter() {
-        setVisible(false); // Minimize the main menu
-        PetSelectionDialog petSelectionDialog = new PetSelectionDialog(this);
-        petSelectionDialog.setVisible(true); // Show pet selection dialog
-        // The actual game start logic should now be handled in PetSelectionDialog
-    }
-
-    private void loadGame() {
-        JOptionPane.showMessageDialog(this, "Load Game feature is not implemented yet.");
-    }
-
-    private void openInstructionsPage() {
-        setVisible(false); // Hide the main menu
-        InstructionsPage instructionsPage = new InstructionsPage();
-        instructionsPage.setVisible(true); // Show instructions page
-        instructionsPage.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 setVisible(true);
@@ -151,6 +126,20 @@ public class MainMenu extends JFrame {
         // Show the game window
         gameView.setVisible(true);
     }
+
+
+    private void openInstructionsPage() {
+        setVisible(false); // Hide the main menu
+        InstructionsPage instructionsPage = new InstructionsPage();
+        instructionsPage.setVisible(true); // Show instructions page
+        instructionsPage.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                setVisible(true); // Re-show the main menu when instructions page closes
+            }
+        });
+    }
+
 
     private void loadGame() {
         String slot = JOptionPane.showInputDialog(this, "Enter load slot (1, 2, or 3):");
@@ -184,38 +173,6 @@ public class MainMenu extends JFrame {
         }
     }
 
-    private void showInstructions() {
-        JOptionPane.showMessageDialog(this,
-            """
-            Welcome to Pixel Pets!
-
-            Game Instructions:
-            1. Choose your pet (Dog, Cat, Bird)
-
-            2. Take care of your pet by:
-               - Feeding when hungry
-               - Playing when lonely
-               - Letting it sleep when tired
-
-            3. Monitor your pet's stats:
-               - Health
-               - Hunger
-               - Social
-               - Sleep
-               - Mood
-
-            4. Pay attention to alerts and warnings
-            5. Different Pets have unique characteristics!
-
-            Keep your pet healthy and happy, if you want to prevent their inevitable death!
-            """,
-            "Game Instructions",
-            JOptionPane.INFORMATION_MESSAGE);
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                setVisible(true); // Re-show the main menu when instructions page closes
-            }
-        });
-    }
 
     private void openParentalControls() {
         ParentalControlsDialog parentalControlsDialog = new ParentalControlsDialog(this);
@@ -239,8 +196,6 @@ public class MainMenu extends JFrame {
 
             // Start autosaving
             pet.startAutoSave(slot, 5, TimeUnit.MINUTES);
-
-            MainMenu mainMenu = new MainMenu();
 
             // Launch the main menu
             MainMenu mainMenu = MainMenu.getInstance(); // Get the single instance of MainMenu

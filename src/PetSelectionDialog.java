@@ -173,7 +173,7 @@ public class PetSelectionDialog extends JDialog {
         petModel.setPetName(selectedPet); // Set the pet's name
 
         PetView gameView = new PetView();
-        PetController controller = new PetController(petModel, gameView, (MainMenu) getParent()); // Pass pet model and view to the controller
+        PetController controller = new PetController(petModel, gameView, (MainMenu) getParent(), true); // Pass pet model and view to the controller
 
         // Show the game view
         gameView.setVisible(true);

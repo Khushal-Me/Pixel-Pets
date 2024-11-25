@@ -386,7 +386,10 @@ private void checkPlayTimeRestriction() {
 
 private void exitGameDueToPlayTimeLimit() {
   // Save the game state if necessary
-  model.save();
+  String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+  if (slot != null && !slot.isEmpty()) {
+      model.save(slot); // Save the game state with the specified slot
+  }
   // Update the total playtime in MainMenu
   mainMenu.incrementTotalPlayTime(sessionPlayTime);
   model.stopTimers(); // Stop all timers
