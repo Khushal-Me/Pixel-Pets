@@ -188,15 +188,6 @@ public class MainMenu extends JFrame {
                 System.err.println("Failed to set system look and feel: " + e.getMessage());
             }
 
-            // Specify the save slot
-            String slot = "1"; // You can change this to any slot you want to use
-
-            // Load saved pet or create a new one
-            Pet pet = Pet.load(slot);
-
-            // Start autosaving
-            pet.startAutoSave(slot, 5, TimeUnit.MINUTES);
-
             // Launch the main menu
             MainMenu mainMenu = MainMenu.getInstance(); // Get the single instance of MainMenu
             mainMenu.setVisible(true);
