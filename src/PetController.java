@@ -311,13 +311,24 @@ public class PetController {
     }
   }
   }
+
   public void handleBackToMainMenu() {
     // Perform any necessary cleanup
-    String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
-    if (slot != null && !slot.isEmpty()) {
-        model.stopItemGenerator();
-    model.save(slot); // Save the game state with the specified slot
+    String slot;
+    while (true) {
+        slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+        if (slot == null) {
+            // User clicked cancel or closed the dialog
+            return;
+        }
+        if (!slot.matches("[123]")) {
+            JOptionPane.showMessageDialog(view, "Please enter 1, 2, or 3.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+        } else {
+            break;
+        }
     }
+
+    model.save(slot); // Save the game state with the specified slot
     model.stopTimers(); // Stop timers
     executorService.shutdownNow(); // Stop controller's executor service
     view.dispose(); // Close the game window
@@ -329,7 +340,6 @@ public class PetController {
     MusicPlayer.getInstance().changeMusic("src/res/Dead.wav"); // Replace with actual path
     // Show the main menu
     mainMenu.setVisible(true);
-
 }
 
 private void updateInventoryView() {
@@ -386,10 +396,21 @@ private void checkPlayTimeRestriction() {
 
 private void exitGameDueToPlayTimeLimit() {
   // Save the game state if necessary
-  String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
-  if (slot != null && !slot.isEmpty()) {
-      model.save(slot); // Save the game state with the specified slot
+  String slot;
+  while (true) {
+      slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+      if (slot == null) {
+          // User clicked cancel or closed the dialog
+          return;
+      }
+      if (!slot.matches("[123]")) {
+          JOptionPane.showMessageDialog(view, "Please enter 1, 2, or 3.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+      } else {
+          break;
+      }
   }
+
+  model.save(slot); // Save the game state with the specified slot
   // Update the total playtime in MainMenu
   mainMenu.incrementTotalPlayTime(sessionPlayTime);
   model.stopTimers(); // Stop all timers
@@ -402,12 +423,23 @@ private void exitGameDueToPlayTimeLimit() {
   mainMenu.setVisible(true);
 }
 
-  private void handleSaveAction() {
-    String slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
-    if (slot != null && !slot.isEmpty()) {
-        model.save(slot);
-        JOptionPane.showMessageDialog(view, "Game saved successfully.");
-    }
+private void handleSaveAction() {
+  String slot;
+  while (true) {
+      slot = JOptionPane.showInputDialog("Enter save slot (1, 2, or 3):");
+      if (slot == null) {
+          // User clicked cancel or closed the dialog
+          return;
+      }
+      if (!slot.matches("[123]")) {
+          JOptionPane.showMessageDialog(view, "Please enter 1, 2, or 3.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+      } else {
+          break;
+      }
+  }
+
+  model.save(slot);
+  JOptionPane.showMessageDialog(view, "Game saved successfully.");
 }
 
 

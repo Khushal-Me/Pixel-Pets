@@ -142,34 +142,45 @@ public class MainMenu extends JFrame {
 
 
     private void loadGame() {
-        String slot = JOptionPane.showInputDialog(this, "Enter load slot (1, 2, or 3):");
-        if (slot != null && !slot.isEmpty()) {
-            Pet petModel = Pet.load(slot);
-            if (petModel != null) {
-                petModel.startAutoSave(slot, 5, TimeUnit.MINUTES);
-                PetView gameView = new PetView();
-                PetController controller = new PetController(petModel, gameView, this, false); // Pass false for loading a game
-    
-                // Hide the main menu
-                setVisible(false);
-    
-                // Add listener to re-show the main menu when the game window closes
-                gameView.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        setVisible(true);
-                        gameView.dispose();
-                    }
-                });
-    
-                // Show the game window
-                gameView.setVisible(true);
-    
-                // Display success message
-                JOptionPane.showMessageDialog(gameView, "Game loaded successfully.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to load game from slot " + slot, "Load Error", JOptionPane.ERROR_MESSAGE);
+        String slot;
+        while (true) {
+            slot = JOptionPane.showInputDialog(this, "Enter load slot (1, 2, or 3):");
+            if (slot == null) {
+                // User clicked cancel or closed the dialog
+                return;
             }
+            if (!slot.matches("[123]")) {
+                JOptionPane.showMessageDialog(this, "Please enter 1, 2, or 3.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            } else {
+                break;
+            }
+        }
+    
+        Pet petModel = Pet.load(slot);
+        if (petModel != null) {
+            petModel.startAutoSave(slot, 5, TimeUnit.MINUTES);
+            PetView gameView = new PetView();
+            PetController controller = new PetController(petModel, gameView, this, false); // Pass false for loading a game
+    
+            // Hide the main menu
+            setVisible(false);
+    
+            // Add listener to re-show the main menu when the game window closes
+            gameView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    setVisible(true);
+                    gameView.dispose();
+                }
+            });
+    
+            // Show the game window
+            gameView.setVisible(true);
+    
+            // Display success message
+            JOptionPane.showMessageDialog(gameView, "Game loaded successfully.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Save file doesn't exist.", "Load Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

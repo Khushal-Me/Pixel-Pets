@@ -613,7 +613,13 @@ public void stopAutoSave() {
     public static Pet load(String slot) {
       // Construct the file path
       String filePath = SAVE_FILE_PREFIX + slot + ".dat";
-
+      File saveFile = new File(filePath);
+  
+      if (!saveFile.exists()) {
+          // If the file doesn't exist, return null
+          return null;
+      }
+  
       try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
           return (Pet) in.readObject();
       } catch (IOException | ClassNotFoundException e) {
