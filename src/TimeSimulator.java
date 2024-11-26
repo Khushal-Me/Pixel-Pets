@@ -8,6 +8,27 @@ import java.util.concurrent.TimeUnit;
 /**
  * This class is responsible for updating the pet's attributes every minute.
  */
+/**
+ * A class that simulates the passage of time and updates pet attributes periodically.
+ * This class implements Serializable to allow for object persistence.
+ * It manages a scheduled executor service that periodically updates the pet's attributes
+ * such as hunger, sleep, and social needs.
+ *
+ * The simulator can be started, stopped, and will automatically reinitialize after
+ * deserialization through custom serialization handling.
+ *
+ * <p>The updates occur at fixed intervals of one minute and include:
+ * <ul>
+ *   <li>Increasing hunger level
+ *   <li>Increasing sleep needs
+ *   <li>Decreasing social interaction
+ *   <li>Checking attribute bounds
+ *   <li>Adjusting behavior based on personality
+*
+ *
+ * @see Pet
+ * @see Serializable
+ */
 public class TimeSimulator implements Serializable {
 
   private static final long serialVersionUID = 1L;

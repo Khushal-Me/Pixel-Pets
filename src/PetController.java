@@ -7,8 +7,27 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+
 /**
- * This class represents the controller for the pet game. It connects the model and the view.
+ * Controller class that manages interactions between the Pet model and PetView.
+ * Handles game logic, user actions, and updates to the view based on model changes.
+ * 
+ * The controller manages:
+ * - Pet actions (feed, play, sleep)
+ * - Health status monitoring
+ * - Pet death scenarios
+ * - Game saving/loading
+ * - Playtime restrictions
+ * - Inventory management
+ * - UI updates
+ * - Background task scheduling
+ *
+ * This class uses an ExecutorService for scheduling periodic tasks and maintains
+ * session information such as playtime tracking.
+ *
+ * @see Pet
+ * @see PetView
+ * @see MainMenu
  */
 public class PetController {
 

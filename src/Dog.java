@@ -1,8 +1,22 @@
-
 import java.io.Serializable;
 
 /**
- * The class that represents a happy personality.
+ * The Dog class implements the PersonalityStrategy interface and is Serializable.
+ * It adjusts the behavior of a pet based on its health.
+ * 
+ * <p>Usage example:</p>
+ * <pre>
+ * {@code
+ * Dog dog = new Dog();
+ * Pet pet = new Pet();
+ * dog.adjustBehavior(pet);
+ * }
+ * </pre>
+ * 
+ * @see PersonalityStrategy
+ * @see Serializable
+ * @see Pet
+ * @see Action
  */
 public class Dog implements PersonalityStrategy, Serializable {
   private static final long serialVersionUID = 1L;

@@ -12,7 +12,33 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class represents a pet.
+ * Represents a virtual pet with various attributes and behaviors.
+ * This class implements the PetModel interface and Serializable for save/load functionality.
+ * The pet has basic attributes like hunger, social interaction, sleep, and health,
+ * which affect its overall mood and behavior.
+ * 
+ * The pet can:
+ * - Be fed, played with, and put to sleep
+ * - Have different personalities (Dog, Cat, Bird)
+ * - Generate and collect items in its inventory
+ * - Be saved to and loaded from files
+ * - Auto-save its state periodically
+ * - Die if health reaches zero and be revived
+ * 
+ * The class manages several background tasks through ExecutorServices:
+ * - Attribute updates over time
+ * - Automatic item generation
+ * - Auto-save functionality
+ * - Sleep/wake cycle management
+ * 
+ * All attributes are bounded between 0 and 100, and the pet's health
+ * decreases when its needs (hunger, social, sleep) are not met.
+ * 
+ * @see PetModel
+ * @see Serializable
+ * @see PersonalityStrategy
+ * @see Inventory
+ * @see TimeSimulator
  */
 public class Pet implements PetModel, Serializable {
   private static final long serialVersionUID = 1L;

@@ -2,6 +2,31 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * The InstructionsPage class represents a JFrame window that displays the instructions for the PixelPets game.
+ * It includes buttons to return to the main menu or quit the game, and displays detailed game instructions.
+ */
+ 
+/**
+ * Constructs a new InstructionsPage window, initializing the frame, panels, buttons, and their action listeners.
+ */
+ 
+/**
+ * Creates a styled JButton with the specified text, width, and height.
+ * The button has custom font, border, background color, and a rollover effect.
+ *
+ * @param text   the text to display on the button
+ * @param width  the preferred width of the button
+ * @param height the preferred height of the button
+ * @return a styled JButton with the specified properties
+ */
+ 
+/**
+ * The main method to run the InstructionsPage independently.
+ * It invokes the creation of the InstructionsPage using the Event Dispatch Thread.
+ *
+ * @param args command-line arguments (not used)
+ */
 public class InstructionsPage extends JFrame {
 
     public InstructionsPage() {

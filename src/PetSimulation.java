@@ -3,12 +3,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+
 /**
- * PetSimulation class that simulates a pet's life.
- * It creates an instance of the Pet class and interacts with it.
- * It also displays the pet's current state, performs the pet's preferred action,
- * and checks the pet's health status and mood.
- * It also writes the simulation output to a file.
+ * A simulation class that demonstrates the functionality of a virtual pet.
+ * This class creates a pet instance and performs various interactions with it,
+ * such as feeding, playing, and sleeping. The simulation results are written
+ * to a specified output file.
+ * 
+ * The simulation performs the following operations:
+ * - Creates a new pet
+ * - Executes basic pet interactions (feed, play, sleep)
+ * - Displays the pet's current state
+ * - Sets and performs a preferred action
+ * - Checks and records the pet's health status and mood
+ * 
+ * The simulation output is written to a file specified by the filePath variable.
+ * If an IO error occurs during file writing, an error message is printed to
+ * standard error.
+ * 
  */
 public class PetSimulation {
 

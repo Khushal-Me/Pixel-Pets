@@ -1,6 +1,22 @@
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The {@code ParentalControlsDialog} class represents a dialog window that allows parents
+ * to set playtime restrictions for the game and view the total playtime.
+ * It prompts the user for a parental password before granting access to the settings.
+ */
+ 
+/**
+ * Creates a new {@code ParentalControlsDialog}.
+ *
+ * @param mainMenu the main menu frame from which this dialog is launched
+ */
+ 
+/**
+ * Saves the playtime restriction settings entered by the user.
+ * Displays a success message upon successful save, or an error message if the input is invalid.
+ */
 public class ParentalControlsDialog extends JDialog {
     private JTextField playTimeField;
     private JButton saveButton;

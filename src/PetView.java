@@ -20,7 +20,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- * This class represents the view for the pet game.
+ * The {@code PetView} class provides the graphical user interface (GUI) for interacting 
+ * with a virtual pet in the Pixel Pets game. It displays the pet's current status 
+ * and allows users to perform various actions to care for the pet.
+ *
+ * Features:
+ * - Displays pet attributes such as health, hunger, mood, social status, and sleep.
+ * - Allows users to select a personality for the pet.
+ * - Provides controls for feeding, playing, and putting the pet to sleep.
+ * - Includes inventory management for items and their usage.
+ * - Integrates with the {@code PetController} for handling user interactions.
+ * - Updates pet images dynamically based on its state.
+ *
+ * Usage:
+ * Instantiate this class to create the pet interaction view. Ensure that a 
+ * {@code PetController} is set to manage interactions and update the pet's status.
+ *
+ * Dependencies:
+ * - {@code PetController}: Handles actions and updates the view based on user interactions.
+ * - {@code PersonalityStrategy}: Provides pet behavior based on selected personality.
+ * - {@code PetSelectionDialog}: Facilitates pet selection during initialization.
+ *
+ * Part of the Pixel Pets game and follows the Model-View-Controller (MVC) design pattern.
  */
 public class PetView extends JFrame {
 

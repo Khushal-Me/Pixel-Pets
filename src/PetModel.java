@@ -1,10 +1,32 @@
 /**
- * Enumerated type for the actions that can be performed on a pet.
+ * The PetModel interface represents a virtual pet with various attributes and actions.
+ * It defines the core functionalities that a pet should have, including basic needs
+ * management (feeding, playing, sleeping), status monitoring, and personality traits.
+ *
+ * The pet has several attributes:
+ * - Hunger level
+ * - Social level
+ * - Sleep level
+ * - Health level
+ *
+ * Each action (feed, play, sleep) affects these attributes in specific ways:
+ * - Feeding decreases hunger and increases health
+ * - Playing increases social interaction and health
+ * - Sleeping decreases sleep need and increases health
+ *
+ * The pet also has:
+ * - A personality that influences its behavior
+ * - A mood that changes based on its states
+ * - Preferred actions based on its current needs
+ * - Health status monitoring
+ * - Death condition checking
+ * - Time tracking for interactions
+ *
  */
 public interface PetModel {
 
   /**
-   * Feed th pet, the hunger level will decrease by 10 and the health level will increase by 5.
+   * Feed the pet, the hunger level will decrease by 10 and the health level will increase by 5.
    */
   public void feed();
 

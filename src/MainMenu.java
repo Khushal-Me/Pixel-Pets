@@ -5,6 +5,27 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * Represents the main menu of the PixelPets game application.
+ * This class implements a Singleton pattern to ensure only one instance of the main menu exists.
+ * The menu provides options to start a new game, load existing games, view instructions,
+ * access parental controls, and quit the application.
+ * 
+ * Features:
+ * - Background music management through MusicPlayer
+ * - Game save/load functionality 
+ * - Parental controls and play time restrictions
+ * - Custom styled UI components
+ * 
+ * The main menu serves as the central navigation hub for the game, managing transitions
+ * between different game states and maintaining persistent settings.
+ *
+ * @see MusicPlayer
+ * @see Settings
+ * @see Pet
+ * @see PetView
+ * @see PetController
+ */
 public class MainMenu extends JFrame {
 
     private static MainMenu instance; // Singleton instance of MainMenu

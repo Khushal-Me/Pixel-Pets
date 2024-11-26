@@ -2,6 +2,27 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * A dialog window for selecting a virtual pet in the game.
+ * This class provides a graphical interface where users can choose between different types of pets
+ * (dog, cat, or bird) and proceed to start the game with their selected pet.
+ * 
+ * The dialog includes:
+ * - Navigation buttons (Return to Main Menu, Quit Game)
+ * - Three pet options with images
+ * - A selection confirmation button
+ * 
+ * Features:
+ * - Visual feedback for pet selection
+ * - Input validation to ensure a pet is selected
+ * - Smooth transition to game start
+ * - Integration with main menu and game controller
+ * 
+ * @see MainMenu
+ * @see PetController
+ * @see PetView
+ * @see Pet
+ */
 public class PetSelectionDialog extends JDialog {
     private String selectedPet = null; // Holds the selected pet's name
     private JButton selectedButton = null; // Keeps track of the currently selected button

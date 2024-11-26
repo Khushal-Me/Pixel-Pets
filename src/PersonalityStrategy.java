@@ -1,11 +1,12 @@
 /**
  * Interface for the personality strategy.
  */
+/**
+ * Defines a strategy for adjusting pet personality behaviors.
+ * Implements the Strategy pattern to encapsulate different personality behaviors
+ * that can be applied to pets.
+ * 
+ */
 public interface PersonalityStrategy {
-
-  /**
-   * Adjust the behavior of the pet based on its personality.
-   * @param pet the pet to adjust the behavior of
-   */
   void adjustBehavior(Pet pet);
 }
