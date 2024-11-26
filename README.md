@@ -49,7 +49,7 @@ java -jar PixelPets.jar
 Alternatively, you can directly run the game using the main class:
 
 ```bash
-java -cp out Main
+java -cp out MainMenu
 ```
 
 ---
