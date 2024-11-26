@@ -50,7 +50,7 @@ public class MainMenu extends JFrame {
 
         // Ensure music plays only once when the main menu is first opened
         if (!isMusicPlaying) {
-            String musicFilePath = "src/res/alive.wav"; // Replace with actual file path
+            String musicFilePath = "src/res/Alive.wav"; // Replace with actual file path
             musicPlayer.playMusic(musicFilePath);
             isMusicPlaying = true;  // Music starts playing once
         }
@@ -126,7 +126,7 @@ public class MainMenu extends JFrame {
 
     private void startNewGame() {
         // Change the music to normal gameplay music
-        MusicPlayer.getInstance().changeMusic("res/alive.wav");
+        MusicPlayer.getInstance().changeMusic("src/res/Alive.wav");
         // Create model, view, and controller
         Pet petModel = new Pet();
         PetView gameView = new PetView();

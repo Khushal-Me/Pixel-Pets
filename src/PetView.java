@@ -45,6 +45,8 @@ import javax.swing.JTextArea;
  */
 public class PetView extends JFrame {
 
+  private javax.swing.Timer scoreTimer;
+  private int score = 0; // Initialize score to 0
   private final JLabel healthLabel;
   private final JLabel hungerLabel;
   private final JLabel socialLabel;
@@ -72,6 +74,7 @@ public class PetView extends JFrame {
   private final JButton useItemButton;
   private final JButton vetButton;
   private JButton saveButton;
+  private JLabel scoreLabel;
 
 
   /**
@@ -89,7 +92,9 @@ public class PetView extends JFrame {
     personalityLabel = new JLabel("Choose Personality:");
     personalityComboBox = new JComboBox<>(new String[] {"Happy", "Grumpy", "Normal"});
     confirmButton = new JButton("Confirm");
+    scoreLabel = new JLabel("Score: 0");
 
+    panel.add(scoreLabel);
     panel.add(personalityLabel);
     panel.add(personalityComboBox);
     panel.add(confirmButton);
@@ -150,6 +155,15 @@ public class PetView extends JFrame {
 
     panel.add(inventoryPanel);
 
+
+              // Initialize the timer to update the score every second
+    scoreTimer = new javax.swing.Timer(1000, e -> {
+          score++; // Increment the score
+          scoreLabel.setText("Score: " + score); // Update the score label
+    });
+
+    scoreTimer.start(); // Start the timer
+
     // Initially hide other attributes and buttons
     toggleAttributesVisibility(false);
     toggleButtonsVisibility(false);
@@ -169,6 +183,9 @@ public class PetView extends JFrame {
     petImageLabel.setHorizontalAlignment(JLabel.CENTER);
     // Add the petImageLabel to the panel at the desired position
     panel.add(petImageLabel);
+
+
+
   }
 
 /**
@@ -227,7 +244,6 @@ public void addBackButtonListener(ActionListener listener) {
 public void addSaveListener(ActionListener saveListener) {
     saveButton.addActionListener(saveListener);
 }
-
 
 
   /**
@@ -639,7 +655,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
         }
     }
 }
-public void updateInventory(List<Item> items) {
+    public void updateInventory(List<Item> items) {
         inventoryListModel.clear();
         for (Item item : items) {
             inventoryListModel.addElement(item.getName());

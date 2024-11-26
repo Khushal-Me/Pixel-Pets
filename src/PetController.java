@@ -221,42 +221,33 @@ public class PetController {
     view.updatePetImage(petName, false); // Pet is alive
 }
 
-  /**
-   * This method handles the feed action.
-   */
-  public void handleFeedAction() {
-    model.feed();
-    updateView();
-    view.appendMessage(model.getMessage());
-  }
+public void handleFeedAction() {
+  model.feed();
+  updateView();
+  view.appendMessage(model.getMessage());
+}
 
-  /**
-   * This method handles the sleep action.
-   */
-  public void handleSleepAction() {
-    try {
+public void handlePlayAction() {
+  model.play();
+  updateView();
+  view.appendMessage(model.getMessage());
+}
+
+public void handleSleepAction() {
+  try {
       model.sleep();
-    } catch (IllegalStateException e) {
+  } catch (IllegalStateException e) {
       view.appendMessage(e.getMessage());
       return;
-    }
-    view.appendMessage(model.getMessage());
-    executorService.schedule(() -> {
+  }
+  view.appendMessage(model.getMessage());
+  executorService.schedule(() -> {
       SwingUtilities.invokeLater(() -> {
-        view.appendMessage(model.getMessage());
-        updateView();
+          view.appendMessage(model.getMessage());
+          updateView();
       });
-    }, 1, TimeUnit.MINUTES);
-  }
-
-  /**
-   * This method handles the play action.
-   */
-  public void handlePlayAction() {
-    model.play();
-    updateView();
-    view.appendMessage(model.getMessage());
-  }
+  }, 1, TimeUnit.MINUTES);
+}
 
   /**
    * This method gets the preferred action from the model.
