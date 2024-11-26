@@ -31,7 +31,7 @@ javac -d out src/*.java
 Package the compiled files into an executable JAR file using the provided `MANIFEST.MF`:
 
 ```bash
-jar cmf src/META-INF/MANIFEST.MF PixelPets.jar -C out .
+jar cmf src/META-INF/MANIFEST.MF PixelPets.jar -C out . -C src res
 ```
 
 ---

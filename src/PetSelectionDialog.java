@@ -110,10 +110,14 @@ public class PetSelectionDialog extends JDialog {
     }
 
     private JButton createPetButton(String petName, String imagePath) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
+        java.net.URL imgURL = getClass().getResource(imagePath);
+        if (imgURL == null) {
+            System.err.println("Couldn't find file: " + imagePath);
+            return new JButton("Missing Image");
+        }
+        ImageIcon icon = new ImageIcon(imgURL);
         Image scaledImage = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         icon = new ImageIcon(scaledImage);
-
         JButton button = new JButton(icon);
         button.setVerticalTextPosition(SwingConstants.BOTTOM);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -121,7 +125,6 @@ public class PetSelectionDialog extends JDialog {
         button.setFocusPainted(false);
         button.setBackground(Color.WHITE);
         button.setOpaque(true);
-
         button.addActionListener(e -> {
             if (selectedButton != null) {
                 selectedButton.setBackground(Color.WHITE); // Reset previous selection
@@ -130,10 +133,9 @@ public class PetSelectionDialog extends JDialog {
             selectedButton = button;
             button.setBackground(new Color(220, 220, 220)); // Highlight the selected pet
         });
-
         return button;
     }
-
+    
     private JButton createTopButton(String text, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));
