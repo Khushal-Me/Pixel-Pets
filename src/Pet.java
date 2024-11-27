@@ -381,7 +381,7 @@ public class Pet implements PetModel, Serializable {
    * Increase the sleep level of the pet.
    */
   public void increaseSleep() {
-    sleep += 5;
+    sleep += 15;
     if (sleep > 100) {
       sleep = 100;
     }
@@ -776,6 +776,20 @@ public void revive() {
       message = "Your pet has been revived!";
       reinitializeServices();
   }
+}
+@Override
+public void exercise() {
+    if (isSleeping) {
+        message = "Pet is sleeping. Please wait until it wakes up.";
+        lastInteractedTime = System.currentTimeMillis();
+        return;
+    }
+    message = "You exercised your pet!";
+    hunger += 10; // Increase hunger
+    sleep -= 10;  // decrease sleep (pet becomes sleepier)
+    health += 10;  // Increase health
+    lastInteractedTime = System.currentTimeMillis();
+    checkBounds();
 }
 
 }

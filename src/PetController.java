@@ -58,6 +58,8 @@ public class PetController {
     view.addSaveListener(e -> handleSaveAction());
     view.addVetButtonListener(e -> handleVetAction());
     view.addUseItemListener(e -> handleUseItem());
+    view.addExerciseListener(e -> handleExerciseAction());
+
 
     if (isNewGame) {
         view.displayPetSelectionDialog();
@@ -451,7 +453,11 @@ private void handleSaveAction() {
   model.save(slot);
   JOptionPane.showMessageDialog(view, "Game saved successfully.");
 }
-
+public void handleExerciseAction() {
+  model.exercise();
+  updateView();
+  view.appendMessage(model.getMessage());
+}
 
 }
 

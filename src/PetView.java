@@ -17,6 +17,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 /**
@@ -75,6 +76,8 @@ public class PetView extends JFrame {
   private final JButton vetButton;
   private JButton saveButton;
   private JLabel scoreLabel;
+  private final JButton exerciseButton;
+  private JSlider volumeSlider;
 
 
   /**
@@ -99,6 +102,7 @@ public class PetView extends JFrame {
     panel.add(personalityComboBox);
     panel.add(confirmButton);
 
+
     // Other attributes initially hidden
     healthLabel = new JLabel("Health:");
     hungerLabel = new JLabel("Hunger:");
@@ -113,6 +117,7 @@ public class PetView extends JFrame {
     performPreferredActionButton = new JButton("Perform Preferred Action");
     backButton = new JButton("Back to Main Menu");
     saveButton = new JButton("Save Game");
+    exerciseButton = new JButton("Exercise");
     add(saveButton, BorderLayout.SOUTH);
 
    // Inventory Panel
@@ -143,7 +148,7 @@ public class PetView extends JFrame {
     panel.add(moodLabel);
     panel.add(personalityLabel);
     panel.add(lastInteractedLabel);
-
+    panel.add(exerciseButton);
     panel.add(feedButton);
     panel.add(playButton);
     panel.add(sleepButton);
@@ -183,6 +188,21 @@ public class PetView extends JFrame {
     petImageLabel.setHorizontalAlignment(JLabel.CENTER);
     // Add the petImageLabel to the panel at the desired position
     panel.add(petImageLabel);
+
+    // In the constructor
+    volumeSlider = new JSlider(0, 100, 100); // Min 0, Max 100, Initial 100
+    volumeSlider.setMajorTickSpacing(25);
+    volumeSlider.setPaintTicks(true);
+    volumeSlider.setPaintLabels(true);
+    panel.add(new JLabel("Volume"));
+    panel.add(volumeSlider);
+
+    volumeSlider.addChangeListener(e -> {
+        int value = volumeSlider.getValue();
+        float volume = value / 100f; // Convert to 0.0 - 1.0
+        MusicPlayer.getInstance().setVolume(volume);
+    });
+
 
 
 
@@ -388,6 +408,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     feedButton.setVisible(visible);
     playButton.setVisible(visible);
     sleepButton.setVisible(visible);
+    exerciseButton.setVisible(visible);
     getPreferredActionButton.setVisible(visible);
     performPreferredActionButton.setVisible(visible);
   }
@@ -453,6 +474,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     feedButton.setEnabled(enabled);
     playButton.setEnabled(enabled);
     sleepButton.setEnabled(enabled);
+    exerciseButton.setEnabled(enabled);
     getPreferredActionButton.setEnabled(enabled);
     performPreferredActionButton.setEnabled(enabled);
   }
@@ -693,5 +715,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     toggleButtonsVisibility(true);
     togglePersonalitySelection(false);
   }
-
+  public void addExerciseListener(ActionListener exerciseListener) {
+    exerciseButton.addActionListener(exerciseListener);
+}
 }
