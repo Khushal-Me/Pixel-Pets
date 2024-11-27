@@ -452,6 +452,11 @@ private void handleSaveAction() {
   JOptionPane.showMessageDialog(view, "Game saved successfully.");
 }
 
+public void cleanup() {
+  model.stopTimers();
+  executorService.shutdownNow();
+  view.dispose();
+}
 
 }
 
