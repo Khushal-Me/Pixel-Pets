@@ -1,25 +1,12 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
 
+import javax.swing.*;
+import java.awt.*;
+import javax.swing.border.LineBorder;
 /**
  * The {@code PetView} class provides the graphical user interface (GUI) for interacting 
  * with a virtual pet in the Pixel Pets game. It displays the pet's current status 
@@ -48,10 +35,10 @@ public class PetView extends JFrame {
 
   private javax.swing.Timer scoreTimer;
   private int score = 0; // Initialize score to 0
-  private final JLabel healthLabel;
-  private final JLabel hungerLabel;
-  private final JLabel socialLabel;
-  private final JLabel sleepLabel;
+  private JProgressBar healthBar;
+  private JProgressBar hungerBar;
+  private JProgressBar socialBar;
+  private JProgressBar sleepBar;
   private final JLabel moodLabel;
   private final JLabel personalityLabel;
   private final JLabel lastInteractedLabel;
@@ -86,11 +73,11 @@ public class PetView extends JFrame {
   public PetView() {
     setTitle("Pixel Pets");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(600, 600);
+    setSize(800, 600);
     setLocationRelativeTo(null);
 
     JPanel panel = new JPanel();
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setLayout(null);
 
     personalityLabel = new JLabel("Choose Personality:");
     personalityComboBox = new JComboBox<>(new String[] {"Happy", "Grumpy", "Normal"});
@@ -98,26 +85,154 @@ public class PetView extends JFrame {
     scoreLabel = new JLabel("Score: 0");
 
     panel.add(scoreLabel);
+    scoreLabel.setFont(new Font("Arial", Font.BOLD, 28));
     panel.add(personalityLabel);
     panel.add(personalityComboBox);
     panel.add(confirmButton);
 
+    healthBar = new JProgressBar(0, 100);
+    healthBar.setStringPainted(true);
+    healthBar.setBounds(125, 62, 150, 25); 
 
-    // Other attributes initially hidden
-    healthLabel = new JLabel("Health:");
-    hungerLabel = new JLabel("Hunger:");
-    socialLabel = new JLabel("Social:");
-    sleepLabel = new JLabel("Sleep:");
+    hungerBar = new JProgressBar(0, 100);
+    hungerBar.setStringPainted(true);
+    hungerBar.setBounds(125, 87, 150, 25); 
+
+    socialBar = new JProgressBar(0, 100);
+    socialBar.setStringPainted(true);
+    socialBar.setBounds(125, 112, 150, 25); 
+
+    sleepBar = new JProgressBar(0, 100);
+    sleepBar.setStringPainted(true);
+    sleepBar.setBounds(125, 137, 150, 25);
+    
+
+    panel.add(healthBar);
+    panel.add(hungerBar);
+    panel.add(socialBar);
+    panel.add(sleepBar);
+  
     moodLabel = new JLabel("Mood:");
     lastInteractedLabel = new JLabel("Last Interaction: ");
+
+    // Button: Feed
     feedButton = new JButton("Feed");
+    feedButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    feedButton.setBorder(new LineBorder(Color.BLACK, 3));
+    feedButton.setBackground(Color.WHITE);
+    feedButton.setOpaque(true);
+    feedButton.setFocusPainted(false);
+    feedButton.setHorizontalAlignment(SwingConstants.CENTER);
+    feedButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Play
     playButton = new JButton("Play");
+    playButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    playButton.setBorder(new LineBorder(Color.BLACK, 3));
+    playButton.setBackground(Color.WHITE);
+    playButton.setOpaque(true);
+    playButton.setFocusPainted(false);
+    playButton.setHorizontalAlignment(SwingConstants.CENTER);
+    playButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Sleep
     sleepButton = new JButton("Sleep");
+    sleepButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    sleepButton.setBorder(new LineBorder(Color.BLACK, 3));
+    sleepButton.setBackground(Color.WHITE);
+    sleepButton.setOpaque(true);
+    sleepButton.setFocusPainted(false);
+    sleepButton.setHorizontalAlignment(SwingConstants.CENTER);
+    sleepButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Get Preferred Action
     getPreferredActionButton = new JButton("Get Preferred Action");
-    performPreferredActionButton = new JButton("Perform Preferred Action");
+    getPreferredActionButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    getPreferredActionButton.setBorder(new LineBorder(Color.BLACK, 3));
+    getPreferredActionButton.setBackground(Color.WHITE);
+    getPreferredActionButton.setOpaque(true);
+    getPreferredActionButton.setFocusPainted(false);
+    getPreferredActionButton.setHorizontalAlignment(SwingConstants.CENTER);
+    getPreferredActionButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Perform Preferred Action
+    performPreferredActionButton = new JButton("Do Preferred Action");
+    performPreferredActionButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    performPreferredActionButton.setBorder(new LineBorder(Color.BLACK, 3));
+    performPreferredActionButton.setBackground(Color.WHITE);
+    performPreferredActionButton.setOpaque(true);
+    performPreferredActionButton.setFocusPainted(false);
+    performPreferredActionButton.setHorizontalAlignment(SwingConstants.CENTER);
+    performPreferredActionButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Back to Main Menu
     backButton = new JButton("Back to Main Menu");
+    backButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    backButton.setBorder(new LineBorder(Color.BLACK, 3));
+    backButton.setBackground(Color.WHITE);
+    backButton.setOpaque(true);
+    backButton.setFocusPainted(false);
+    backButton.setHorizontalAlignment(SwingConstants.CENTER);
+    backButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Save Game
     saveButton = new JButton("Save Game");
+    saveButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    saveButton.setBorder(new LineBorder(Color.BLACK, 3));
+    saveButton.setBackground(Color.WHITE);
+    saveButton.setOpaque(true);
+    saveButton.setFocusPainted(false);
+    saveButton.setHorizontalAlignment(SwingConstants.CENTER);
+    saveButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Exercise
     exerciseButton = new JButton("Exercise");
+    exerciseButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    exerciseButton.setBorder(new LineBorder(Color.BLACK, 3));
+    exerciseButton.setBackground(Color.WHITE);
+    exerciseButton.setOpaque(true);
+    exerciseButton.setFocusPainted(false);
+    exerciseButton.setHorizontalAlignment(SwingConstants.CENTER);
+    exerciseButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+    // Button: Take Pet to Vet
+    vetButton = new JButton("Take Pet to Vet");
+    vetButton.setFont(new Font("Arial", Font.PLAIN, 20));
+    vetButton.setBorder(new LineBorder(Color.BLACK, 3));
+    vetButton.setBackground(Color.WHITE);
+    vetButton.setOpaque(true);
+    vetButton.setFocusPainted(false);
+    vetButton.setHorizontalAlignment(SwingConstants.CENTER);
+    vetButton.setBorder(BorderFactory.createCompoundBorder(
+        new LineBorder(Color.BLACK, 3),
+        BorderFactory.createEmptyBorder(1, 2, 1, 2)
+    ));
+
+
     add(saveButton, BorderLayout.SOUTH);
 
    // Inventory Panel
@@ -136,35 +251,9 @@ public class PetView extends JFrame {
    inventoryPanel.setPreferredSize(new Dimension(300, 500)); // Adjust width and height as needed
    inventoryList.setPreferredSize(new Dimension(300, 500));
 
-
-   vetButton = new JButton("Take Pet to Vet");
-
-    // Add vetButton to buttonsPanel
-    // Add inventory panel to main panel
-    panel.add(healthLabel);
-    panel.add(hungerLabel);
-    panel.add(socialLabel);
-    panel.add(sleepLabel);
-    panel.add(moodLabel);
-    panel.add(personalityLabel);
-    panel.add(lastInteractedLabel);
-    panel.add(exerciseButton);
-    panel.add(feedButton);
-    panel.add(playButton);
-    panel.add(sleepButton);
-    panel.add(vetButton);
-    panel.add(backButton);
-    panel.add(getPreferredActionButton);
-    panel.add(performPreferredActionButton);
-    panel.add(saveButton);
-
-    panel.add(inventoryPanel);
-
-
-              // Initialize the timer to update the score every second
-    scoreTimer = new javax.swing.Timer(1000, e -> {
-          score++; // Increment the score
-          scoreLabel.setText("Score: " + score); // Update the score label
+   scoreTimer = new javax.swing.Timer(1000, e -> {
+    score++; // Increment the score
+    scoreLabel.setText("Score: " + score); // Update the score label
     });
 
     scoreTimer.start(); // Start the timer
@@ -180,9 +269,7 @@ public class PetView extends JFrame {
     messageArea.setLineWrap(true);
     messageArea.setWrapStyleWord(true);
     JScrollPane scrollPane = new JScrollPane(messageArea);
-    panel.add(scrollPane);
 
-    add(panel);
 
     petImageLabel = new JLabel();
     petImageLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -198,13 +285,80 @@ public class PetView extends JFrame {
     panel.add(volumeSlider);
 
     volumeSlider.addChangeListener(e -> {
-        int value = volumeSlider.getValue();
-        float volume = value / 100f; // Convert to 0.0 - 1.0
-        MusicPlayer.getInstance().setVolume(volume);
+      int value = volumeSlider.getValue();
+      float volume = value / 100f; // Convert to 0.0 - 1.0
+      MusicPlayer.getInstance().setVolume(volume);
     });
 
 
+    
+    // Position the "Back to Main Menu" button at the top left
+  backButton.setBounds(20, 10, 200, 40); // x, y, width, height
+  panel.add(backButton);
 
+  // Position the "Save Game" button at the top right
+  saveButton.setBounds(615, 10, 150, 40); // x, y, width, height
+  panel.add(saveButton);
+
+  moodLabel.setBounds(370, 17, 150, 25);
+  personalityLabel.setBounds(370, 5, 150, 25);
+  lastInteractedLabel.setBounds(50, 250, 150, 25);
+
+  // Position the score label compactly
+  scoreLabel.setBounds(350, 35, 150, 25); // Adjust y position for compactness
+  panel.add(scoreLabel);
+
+  // Position the inventory panel
+  inventoryPanel.setBounds(465, 260, 240, 140); // Adjust for compactness
+  panel.add(inventoryPanel);
+
+  
+  
+
+  volumeSlider.setBounds(0, 520, 150, 50); // Adjust slider width and position
+  panel.add(volumeSlider);
+
+  // Position the scrollable message area compactly
+  scrollPane.setBounds(465, 400, 240,90 ); // Reduce width and height
+  panel.add(scrollPane);
+
+  // Position the pet image label
+  petImageLabel.setBounds(50, 175, 300, 300); // Adjust for compact layout
+  panel.add(petImageLabel);
+
+  // Position the buttons on the right side
+  feedButton.setBounds(540, 90, 90, 30); // Compact buttons start lower
+  playButton.setBounds(540, 125, 90, 30);
+  sleepButton.setBounds(540, 160, 90, 30);
+  exerciseButton.setBounds(540, 195, 90, 30);
+  vetButton.setBounds(600, 500, 180, 40);
+  getPreferredActionButton.setBounds(96, 480, 200, 40);
+  performPreferredActionButton.setBounds(380, 500, 200, 40);
+
+
+
+
+    panel.add(moodLabel);
+    panel.add(personalityLabel);
+    panel.add(exerciseButton);
+    panel.add(feedButton);
+    panel.add(playButton);
+    panel.add(sleepButton);
+    panel.add(vetButton);
+    panel.add(backButton);
+    panel.add(getPreferredActionButton);
+    panel.add(performPreferredActionButton);
+    panel.add(saveButton);
+    panel.add(scrollPane);
+    panel.add(inventoryPanel);
+
+
+              // Initialize the timer to update the score every second
+    
+
+    
+
+    add(panel);
 
   }
 
@@ -328,8 +482,11 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param health the health status to be displayed
    */
   public void updateHealth(int health) {
-    healthLabel.setText("Health: " + health);
+    healthBar.setValue(health);
+    healthBar.setString("Health: " + health);
+    healthBar.setForeground(Color.gray); 
   }
+
 
   /**
    * This method updates the hunger label.
@@ -337,7 +494,9 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param hunger the hunger status to be displayed
    */
   public void updateHunger(int hunger) {
-    hungerLabel.setText("Hunger: " + hunger);
+    hungerBar.setValue(hunger);
+    hungerBar.setString("Hunger: " + hunger);
+    hungerBar.setForeground(Color.gray); 
   }
 
   /**
@@ -346,7 +505,9 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param social the social status to be displayed
    */
   public void updateSocial(int social) {
-    socialLabel.setText("Social: " + social);
+    socialBar.setValue(social);
+    socialBar.setString("Social: " + social);
+    socialBar.setForeground(Color.gray);
   }
 
   /**
@@ -355,7 +516,9 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param sleep the sleep status to be displayed
    */
   public void updateSleep(int sleep) {
-    sleepLabel.setText("Sleep: " + sleep);
+    sleepBar.setValue(sleep);
+    sleepBar.setString("Sleep: " + sleep);
+    sleepBar.setForeground(Color.gray);
   }
 
   /**
@@ -382,10 +545,6 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param visible whether the attributes should be visible
    */
   public void toggleAttributesVisibility(boolean visible) {
-    healthLabel.setVisible(visible);
-    hungerLabel.setVisible(visible);
-    socialLabel.setVisible(visible);
-    sleepLabel.setVisible(visible);
     moodLabel.setVisible(visible);
     personalityLabel.setVisible(visible);
   }
