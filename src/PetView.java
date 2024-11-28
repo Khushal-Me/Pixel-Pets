@@ -229,7 +229,7 @@ public void updatePetImage(String petName, boolean isDead) {
   if (isDead) {
       imagePath = "/res/" + petName.toLowerCase() + "_dead.jpg";
   } else {
-      imagePath = "/res/" + petName.toLowerCase() + ".jpeg";
+      imagePath = "/res/" + petName.toLowerCase() + ".jpg";
   }
   java.net.URL imgURL = getClass().getResource(imagePath);
   if (imgURL != null) {

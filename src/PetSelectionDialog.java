@@ -70,9 +70,9 @@ public class PetSelectionDialog extends JDialog {
         petPanel.setLayout(new GridLayout(1, 3, 10, 10)); // 1 row, 3 columns
 
         // Create buttons with images
-        JButton dogButton = createPetButton("Dog", "res/dog.jpeg");
-        JButton catButton = createPetButton("Cat", "res/cat.jpeg");
-        JButton birdButton = createPetButton("Bird", "res/bird.jpeg");
+        JButton dogButton = createPetButton("Dog", "res/dog.jpg");
+        JButton catButton = createPetButton("Cat", "res/cat.jpg");
+        JButton birdButton = createPetButton("Bird", "res/bird.jpg");
 
         // Add pet buttons to the panel
         petPanel.add(dogButton);
