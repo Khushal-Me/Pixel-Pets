@@ -32,6 +32,7 @@ public class MainMenu extends JFrame {
     private final MusicPlayer musicPlayer;
     private boolean isMusicPlaying = false;  // Track if music is playing
     private final Settings settings;
+    private JSlider volumeSlider;
 
     // Private constructor to prevent multiple instances
     public MainMenu() {
@@ -82,6 +83,20 @@ public class MainMenu extends JFrame {
         instructionsButton.addActionListener(e -> openInstructionsPage());
         parentalControlsButton.addActionListener(e -> openParentalControls());
         quitButton.addActionListener(e -> System.exit(0)); // Quit the application
+
+        // In the constructor
+        volumeSlider = new JSlider(0, 100, 100); // Min 0, Max 100, Initial 100
+        volumeSlider.setBounds(250, 430, 300, 50); // Adjust position
+        volumeSlider.setMajorTickSpacing(25);
+        volumeSlider.setPaintTicks(true);
+        volumeSlider.setPaintLabels(true);
+        add(volumeSlider);
+
+        volumeSlider.addChangeListener(e -> {
+            int value = volumeSlider.getValue();
+            float volume = value / 100f; // Convert to 0.0 - 1.0
+        musicPlayer.setVolume(volume);
+        }); // Set volume based on slider value
 
         // Minimize the main menu when a new game starts
         addWindowListener(new WindowAdapter() {
@@ -179,9 +194,10 @@ public class MainMenu extends JFrame {
     
         Pet petModel = Pet.load(slot);
         if (petModel != null) {
+            // Change the music to normal gameplay music
+            MusicPlayer.getInstance().changeMusic("src/res/Alive.wav");
             petModel.startAutoSave(slot, 5, TimeUnit.MINUTES);
             PetView gameView = new PetView();
-            
             // Hide the main menu
             setVisible(false);
     

@@ -10,6 +10,7 @@ public class MusicPlayer {
 
     private Clip clip;
     private static MusicPlayer instance;
+    private FloatControl volumeControl;
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -38,6 +39,7 @@ public class MusicPlayer {
      * @param filePath the path to the music file to be played
      */
     public void playMusic(String filePath) {
+        stopMusic(); // Stop any currently playing music
         System.out.println("Attempting to play music: " + filePath);
         try {
             // Open an audio input stream
@@ -55,10 +57,21 @@ public class MusicPlayer {
             } else {
                 System.out.println("Cannot find the music file.");
             }
+            // Get volume control
+            volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
             System.err.println("An error occurred while playing music: " + ex.getMessage());
         }
     }
+    public void setVolume(float volume) {
+        if (volumeControl != null) {
+            float min = volumeControl.getMinimum();
+            float max = volumeControl.getMaximum();
+            float volumeDb = min + (max - min) * volume;
+            volumeControl.setValue(volumeDb);
+        }
+    }
+
 
     /**
      * Stops the currently playing music, if any.

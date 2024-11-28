@@ -43,6 +43,11 @@ public interface PetModel {
   public void sleep();
 
   /**
+     * Exercise the pet, increasing hunger and decreasing sleepiness but improving health.
+     */
+    public void exercise();
+
+  /**
    * Get the current hunger level of the pet.
    * @return the current hunger level of the pet.
    */

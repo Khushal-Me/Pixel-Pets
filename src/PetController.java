@@ -58,6 +58,8 @@ public class PetController {
     view.addSaveListener(e -> handleSaveAction());
     view.addVetButtonListener(e -> handleVetAction());
     view.addUseItemListener(e -> handleUseItem());
+    view.addExerciseListener(e -> handleExerciseAction());
+
 
     if (isNewGame) {
         view.displayPetSelectionDialog();
@@ -456,6 +458,11 @@ public void cleanup() {
   model.stopTimers();
   executorService.shutdownNow();
   view.dispose();
+}
+public void handleExerciseAction() {
+  model.exercise();
+  updateView();
+  view.appendMessage(model.getMessage());
 }
 
 }
