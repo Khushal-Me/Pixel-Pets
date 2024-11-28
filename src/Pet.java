@@ -246,17 +246,16 @@ public class Pet implements PetModel, Serializable {
   /**
    * Wake the pet up.
    */
-  private void wakeUp() {
-    isSleeping = false;
-    message = "Your pet woke up!";
-    lastInteractedTime = System.currentTimeMillis();
-    sleep -= 10;
-    if (sleep > 100) {
-      sleep = 100;
-    }
-    health += 5;
-    checkBounds();
+  public void wakeUp() {
+    if (isSleeping) {
+      isSleeping = false;
+      message = "Your pet woke up!";
+      lastInteractedTime = System.currentTimeMillis();
+      sleep = Math.max(sleep + 30, 0); // Decrease sleepiness
+      health += 5;
+      checkBounds();
   }
+}
 
   /**
    * Get the current hunger level of the pet.
@@ -705,7 +704,7 @@ public void startItemGenerator() {
     itemGeneratorService = Executors.newSingleThreadScheduledExecutor();
     itemGeneratorService.scheduleAtFixedRate(() -> {
         addItemToInventory();
-    }, 0, 30, TimeUnit.SECONDS); // Adjust the interval as needed
+    }, 0, 15, TimeUnit.SECONDS); // Adjust the interval as needed
 }
 }
 

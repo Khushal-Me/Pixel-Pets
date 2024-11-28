@@ -237,17 +237,21 @@ public void handlePlayAction() {
 public void handleSleepAction() {
   try {
       model.sleep();
+      updateView(); // Update the view immediately after sleeping
   } catch (IllegalStateException e) {
       view.appendMessage(e.getMessage());
       return;
   }
+
   view.appendMessage(model.getMessage());
-  executorService.schedule(() -> {
-      SwingUtilities.invokeLater(() -> {
-          view.appendMessage(model.getMessage());
-          updateView();
-      });
-  }, 1, TimeUnit.MINUTES);
+  //Schedule wake-up actions
+    executorService.schedule(() -> {
+        model.wakeUp(); // Move wake-up logic to a method we can call
+        SwingUtilities.invokeLater(() -> {
+            view.appendMessage(model.getMessage());
+            updateView(); // Update the view when the pet wakes up
+        });
+    }, 10, TimeUnit.SECONDS); // Adjust sleep duration as needed
 }
 
   /**
