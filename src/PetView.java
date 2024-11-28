@@ -224,10 +224,12 @@ public void displayPetSelectionDialog() {
   }
 }
 
-public void updatePetImage(String petName, boolean isDead) {
+public void updatePetImage(String petName, boolean isDead, boolean isSleeping) {
   String imagePath;
   if (isDead) {
       imagePath = "/res/" + petName.toLowerCase() + "_dead.jpg";
+  } else if (isSleeping) {
+      imagePath = "/res/" + petName.toLowerCase() + "_sleep.jpg";
   } else {
       imagePath = "/res/" + petName.toLowerCase() + ".jpg";
   }
@@ -709,7 +711,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     updatePersonality(model.getPersonality() != null ? model.getPersonality().getClass().getSimpleName() : "No Personality Set");
     updateLastInteractedTime(model.getLastInteractedTime());
     updateInventory(model.getInventory().getItems());
-    updatePetImage(model.getPetName(), false); // Ensure the pet image is updated
+    updatePetImage(model.getPetName(), false, model.isSleeping()); // Ensure the pet image is updated
     setActionButtonsEnabled(true);
     toggleAttributesVisibility(true);
     toggleButtonsVisibility(true);

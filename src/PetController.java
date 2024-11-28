@@ -116,7 +116,6 @@ public class PetController {
     view.updateSocial(model.getSocial());
     view.updateSleep(model.getSleep());
     view.updateMood(model.getMood().toString());
-
     PersonalityStrategy personality = model.getPersonality();
     if (personality != null) {
         view.updatePersonality(personality.getClass().getSimpleName());
@@ -126,7 +125,7 @@ public class PetController {
 
     long lastInteractedTime = model.getLastInteractedTime();
     view.updateLastInteractedTime(lastInteractedTime);
-
+    view.updatePetImage(model.getPetName(), model.checkDeath(), model.isSleeping()); // Update pet image based on sleeping state
     updateHealthStatus();
     checkForPreferredActionChange();
 
@@ -220,7 +219,7 @@ public class PetController {
     model.setPetName(petName); 
     model.setAllowTaskExecution();
     // Update the pet image in the view
-    view.updatePetImage(petName, false); // Pet is alive
+    view.updatePetImage(petName, false, false); // Pet is alive
 }
 
 public void handleFeedAction() {
@@ -293,7 +292,7 @@ public void handleSleepAction() {
    */
   public void handlePetDeath() {
     // Update the pet image to the dead state
-    view.updatePetImage(model.getPetName(), true); // Assuming you have getPetName()
+    view.updatePetImage(model.getPetName(), true, false); // Assuming you have getPetName()
     // Disable action buttons
     view.setActionButtonsEnabled(false);
     // Change the music to the dead state music
@@ -381,7 +380,7 @@ private void updateInventoryView() {
     if (password != null && password.equals("CS2212A")) {
         model.revive();
         view.setActionButtonsEnabled(true);
-        view.updatePetImage(model.getPetName(), false); // Update to alive image
+        view.updatePetImage(model.getPetName(), false, false); // Update to alive image
         MusicPlayer.getInstance().changeMusic("src/res/Alive.wav"); // Switch back to normal music
         deathHandled = false; // Reset death handling
         view.appendMessage("Your pet has been revived!");

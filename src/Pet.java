@@ -230,15 +230,18 @@ public class Pet implements PetModel, Serializable {
    */
   @Override
   public void sleep() throws IllegalStateException {
-    executorService2 = Executors.newScheduledThreadPool(1);
     if (!isSleeping) {
       isSleeping = true;
       message = "You put your pet to sleep!";
+      // Update the last interacted time if necessary
+      lastInteractedTime = System.currentTimeMillis();
+      // Notify the controller/view of the state change if needed
+      executorService2 = Executors.newScheduledThreadPool(1);
       executorService2.schedule(this::wakeUp, 10, TimeUnit.SECONDS);
-    } else {
+  } else {
       throw new IllegalStateException("Pet is already sleeping");
-    }
   }
+}
 
   /**
    * Wake the pet up.
@@ -708,14 +711,21 @@ public void startItemGenerator() {
 
 private void addItemToInventory() {
   Random random = new Random();
-  int itemType = random.nextInt(2); // 0 for Food, 1 for Gift
+  int itemType = random.nextInt(3); // 0 for Meat, 1 for Vegetables, 2 for Juice
 
-  if (itemType == 0) {
-      Food food = new Food("Food Item");
-      inventory.addItem(food);
-  } else {
-      Gift gift = new Gift("Gift Item");
-      inventory.addItem(gift);
+  switch (itemType) {
+    case 0:
+        Meat meat = new Meat();
+        inventory.addItem(meat);
+        break;
+    case 1:
+        Vegetables vegetables = new Vegetables();
+        inventory.addItem(vegetables);
+        break;
+    case 2:
+        Juice juice = new Juice();
+        inventory.addItem(juice);
+        break;
   }
 }
 
@@ -790,6 +800,56 @@ public void exercise() {
     health += 10;  // Increase health
     lastInteractedTime = System.currentTimeMillis();
     checkBounds();
+}
+public boolean isSleeping() {
+  return isSleeping;
+}
+public void feedMeat() {
+  if (isSleeping) {
+      message = "Pet is sleeping. Please wait until it wakes up.";
+      lastInteractedTime = System.currentTimeMillis();
+      return;
+  }
+  message = "You fed your pet meat!";
+  hunger -= 20; // Meat reduces hunger significantly
+  if (hunger < 0) {
+      hunger = 0;
+  }
+  health += 5; // Meat increases health more
+  lastInteractedTime = System.currentTimeMillis();
+  checkBounds();
+}
+
+public void feedVegetables() {
+  if (isSleeping) {
+      message = "Pet is sleeping. Please wait until it wakes up.";
+      lastInteractedTime = System.currentTimeMillis();
+      return;
+  }
+  message = "You fed your pet vegetables!";
+  hunger -= 15; // Vegetables reduce hunger moderately
+  if (hunger < 0) {
+      hunger = 0;
+  }
+  health += 3; // Vegetables increase health moderately
+  lastInteractedTime = System.currentTimeMillis();
+  checkBounds();
+}
+
+public void feedJuice() {
+  if (isSleeping) {
+      message = "Pet is sleeping. Please wait until it wakes up.";
+      lastInteractedTime = System.currentTimeMillis();
+      return;
+  }
+  message = "You gave your pet juice!";
+  hunger -= 5; // Juice reduces hunger slightly
+  if (hunger < 0) {
+      hunger = 0;
+  }
+  health += 1; // Juice increases health slightly
+  lastInteractedTime = System.currentTimeMillis();
+  checkBounds();
 }
 
 }
