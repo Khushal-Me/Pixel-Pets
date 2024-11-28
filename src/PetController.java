@@ -466,6 +466,3 @@ public void handleExerciseAction() {
 }
 
 }
-
-
-
