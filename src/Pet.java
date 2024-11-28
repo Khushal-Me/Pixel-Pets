@@ -763,9 +763,9 @@ public void reinitializeServices() {
 public void revive() {
   if (isDead) {
       health = 100;
-      hunger = 20; // Reset hunger to a reasonable level
-      social = 80; // Reset social to a reasonable level
-      sleep = 20;  // Reset sleep to a reasonable level
+      hunger = 0; // Set hunger to minimum
+      social = 100; // Set social to maximum
+      sleep = 0;  // Set sleep to minimum
       mood = Mood.HAPPY;
       isDead = false;
       lastInteractedTime = System.currentTimeMillis();

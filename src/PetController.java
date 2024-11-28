@@ -453,6 +453,12 @@ private void handleSaveAction() {
   model.save(slot);
   JOptionPane.showMessageDialog(view, "Game saved successfully.");
 }
+
+public void cleanup() {
+  model.stopTimers();
+  executorService.shutdownNow();
+  view.dispose();
+}
 public void handleExerciseAction() {
   model.exercise();
   updateView();
@@ -460,6 +466,3 @@ public void handleExerciseAction() {
 }
 
 }
-
-
-
