@@ -3,136 +3,140 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 /**
- * The InstructionsPage class represents a JFrame window that displays the instructions for the PixelPets game.
- * It includes buttons to return to the main menu or quit the game, and displays detailed game instructions.
- */
- 
-/**
- * Constructs a new InstructionsPage window, initializing the frame, panels, buttons, and their action listeners.
- */
- 
-/**
- * Creates a styled JButton with the specified text, width, and height.
- * The button has custom font, border, background color, and a rollover effect.
- *
- * @param text   the text to display on the button
- * @param width  the preferred width of the button
- * @param height the preferred height of the button
- * @return a styled JButton with the specified properties
- */
- 
-/**
- * The main method to run the InstructionsPage independently.
- * It invokes the creation of the InstructionsPage using the Event Dispatch Thread.
- *
- * @param args command-line arguments (not used)
+ * The InstructionsPage class represents the instruction window for the PixelPets game.
+ * It displays instructions and provides options to return to the main menu or quit the game.
  */
 public class InstructionsPage extends JFrame {
 
     public InstructionsPage() {
         // Frame setup
-        setTitle("Instructions - PixelPets");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Only close this window
+        setTitle("Instructions for your Pixel Pets");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setResizable(false);
-        setLayout(new BorderLayout()); // Use BorderLayout for structure
+        setLayout(new BorderLayout(15, 15));
         setLocationRelativeTo(null);
 
-        // Top panel for buttons
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setPreferredSize(new Dimension(800, 80));
-        topPanel.setBackground(Color.WHITE);
+        // Gradient background
+        JPanel gradientPanel = new GradientPanel();
+        gradientPanel.setLayout(new BorderLayout(15, 15));
+        add(gradientPanel);
 
-        // Buttons for top panel
-        JButton returnButton = createStyledButton("Return to Main Menu", 220, 40); // Increased width to fit text
+        // Top panel with buttons
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setOpaque(false);
+        topPanel.setPreferredSize(new Dimension(800, 50)); // Reduced the height of the top panel
+
+        // Styled buttons
+        JButton returnButton = createStyledButton("Return to Main Menu", 220, 40);
         JButton quitButton = createStyledButton("Quit Game", 150, 40);
 
-        // Left-aligned "Return to Main Menu"
+        // Button alignment
         JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-        leftButtonPanel.setBackground(Color.WHITE);
+        leftButtonPanel.setOpaque(false);
         leftButtonPanel.add(returnButton);
 
-        // Right-aligned "Quit Game"
         JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
-        rightButtonPanel.setBackground(Color.WHITE);
+        rightButtonPanel.setOpaque(false);
         rightButtonPanel.add(quitButton);
 
-        // Add left and right button panels to top panel
         topPanel.add(leftButtonPanel, BorderLayout.WEST);
         topPanel.add(rightButtonPanel, BorderLayout.EAST);
 
-        // Center panel for instructions
+        // Center panel with instructions
         JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setOpaque(false);
+        //centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0)); // Added top padding
 
-        JLabel instructionsLabel = new JLabel("<html><div style='text-align: left; margin-left: 15px;'>" +
-        "<h1 style='text-align: center;'>Welcome to Pixel Pets!</h1>" +
-        "<h2 style='text-align: center;'>Game Instructions:</h2>" +
-        "<ol>" +
-        "<li><b>Choose your pet:</b> Dog, Cat, Bird.</li>" +
-        "<li><b>Take care of your pet:</b>" +
-        "<ul>" +
-        "<li>&nbsp;&nbsp;&nbsp;Feed when hungry.</li>" +  // Using &nbsp; for spaces
-        "<li>&nbsp;&nbsp;&nbsp;Play when lonely.</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Let it sleep when tired.</li>" +
+        JLabel instructionsLabel = new JLabel("<html><div style='padding: 0 10px; max-width: 700px;'>" +
+        "<h1 style='color: #2C3E50; text-align: center; margin-bottom: 15px;'>Welcome to Pixel Pets!</h1>" +
+        "<div style='font-size: 16px; color: #34495E; line-height: 1.8;'>" +
+        "<p style='text-align: center;'>Take care of your Pixel Pet by meeting their needs and keeping them happy.</p>" +
+        "<h2 style='color: #2980B9; margin-bottom: 10px;'>How to Play</h2>" +
+        "<ul style='list-style-type: disc; padding-left: 20px;'>" +
+        "<li><strong>Choose Your Pet:</strong> Dog, Cat, or Bird.</li>" +
+        "<li><strong>Care for Your Pet:</strong>" +
+        "<ul style='list-style-type: circle; padding-left: 20px;'>" +
+        "<li>Feed them when hungry.</li>" +
+        "<li>Play with them when lonely.</li>" +
+        "<li>Let them rest when tired.</li>" +
+        "</ul></li>" +
+        "<li><strong>Monitor Stats:</strong> Health, Hunger, Mood, Energy, and Social.</li>" +
         "</ul>" +
-        "</li>" +
-        "<li><b>Monitor your pet's stats:</b>" +
-        "<ul>" +
-        "<li>&nbsp;&nbsp;&nbsp;Health</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Hunger</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Social</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Sleep</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Mood</li>" +
+        "<h2 style='color: #2980B9; margin-bottom: 10px;'>Tips</h2>" +
+        "<ul style='list-style-type: disc; padding-left: 20px;'>" +
+        "<li>Balance their needs to keep them happy and healthy.</li>" +
+        "<li>Neglecting your pet can lower their stats—act fast!</li>" +
         "</ul>" +
-        "</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Pay attention to alerts and warnings.</li>" +
-        "<li>&nbsp;&nbsp;&nbsp;Different pets have unique characteristics!</li>" +
-        "</ol>" +
-        "<p>&nbsp;&nbsp;&nbsp;Keep your pet healthy and happy to prevent their inevitable death!</p>" +
+        "<p style='text-align: center; color: #E74C3C; font-weight: bold;'>Keep your pet thriving and enjoy your time together!</p>" +
         "</div></html>");
-
 
 
         instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
         centerPanel.add(instructionsLabel);
 
-        // Add components to the frame
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
+        // Add panels to gradient background
+        gradientPanel.add(topPanel, BorderLayout.NORTH);
+        gradientPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Action listeners for buttons
+        // Button actions
         returnButton.addActionListener(e -> {
-            dispose(); // Close the instructions page
-            MainMenu.getInstance().setVisible(true); // Return to the main menu
+            dispose();
+            MainMenu.getInstance().setVisible(true);
         });
-
-        quitButton.addActionListener(e -> System.exit(0)); // Quit the application
+        quitButton.addActionListener(e -> System.exit(0));
     }
 
+    /**
+     * Creates a styled button with custom design and hover effect.
+     *
+     * @param text   the button label
+     * @param width  the button width
+     * @param height the button height
+     * @return a styled JButton
+     */
     private JButton createStyledButton(String text, int width, int height) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.PLAIN, 20)); // Match font size with MainMenu
-        button.setBorder(new LineBorder(Color.BLACK, 3)); // Bolder border
-        button.setBackground(Color.WHITE); // White background
-        button.setOpaque(true); // Ensures background color is applied
-        button.setFocusPainted(false); // Removes focus outline
-        button.setFocusable(false); // Disables focus to prevent blue outline
-        button.setPreferredSize(new Dimension(width, height)); // Set fixed size
+        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setBorder(new LineBorder(new Color(100, 100, 255), 3));
+        button.setBackground(Color.WHITE);
+        button.setOpaque(true);
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(width, height));
 
-        // Add rollover effect
+        // Hover effect
         button.addChangeListener(e -> {
             if (button.getModel().isRollover()) {
-                button.setBackground(new Color(220, 220, 220)); // Light gray on hover
+                button.setBackground(new Color(200, 200, 255));
             } else {
-                button.setBackground(Color.WHITE); // White when not hovered
+                button.setBackground(Color.WHITE);
             }
         });
 
         return button;
     }
 
+    /**
+     * Custom JPanel to render a gradient background.
+     */
+    private static class GradientPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            GradientPaint gradient = new GradientPaint(0, 0, new Color(173, 216, 230),
+                    0, getHeight(), new Color(224, 255, 255));
+            g2d.setPaint(gradient);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+    }
+
+    /**
+     * Main method to launch the instructions page.
+     *
+     * @param args command-line arguments (unused)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             InstructionsPage instructionsPage = new InstructionsPage();

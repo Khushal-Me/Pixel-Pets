@@ -34,6 +34,25 @@ public class MainMenu extends JFrame {
     private final Settings settings;
     private JSlider volumeSlider;
 
+
+    private static class GradientPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            
+            // Soft pastel gradient from light blue to light cyan
+            GradientPaint gradient = new GradientPaint(
+                0, 0, new Color(173, 216, 230), // Light Blue at top
+                0, getHeight(), new Color(224, 255, 255) // Very Light Cyan at bottom
+            );
+            
+            g2d.setPaint(gradient);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+    }
+
+
     // Private constructor to prevent multiple instances
     public MainMenu() {
         // Frame setup
@@ -41,8 +60,12 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setResizable(false);
-        setLayout(null); // Use absolute positioning
         setLocationRelativeTo(null);
+
+        // Replace default content pane with gradient panel
+        GradientPanel gradientPanel = new GradientPanel();
+        gradientPanel.setLayout(null); // Use absolute positioning
+        setContentPane(gradientPanel);
 
         settings = new Settings();
 
@@ -51,58 +74,59 @@ public class MainMenu extends JFrame {
 
         // Ensure music plays only once when the main menu is first opened
         if (!isMusicPlaying) {
-            String musicFilePath = "src/res/Alive.wav"; // Replace with actual file path
+            String musicFilePath = "src/res/Alive.wav";
             musicPlayer.playMusic(musicFilePath);
-            isMusicPlaying = true;  // Music starts playing once
+            isMusicPlaying = true;
         }
 
-        // Title label
+        // Title label with improved styling
         JLabel titleLabel = new JLabel("PixelPets");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 56));
+        titleLabel.setForeground(new Color(0, 51, 102)); // Deep blue color
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setBounds(250, 50, 300, 60); // Position for title
-        add(titleLabel);
+        titleLabel.setBounds(200, 50, 400, 80);
+        gradientPanel.add(titleLabel);
 
-        // Buttons
+        // Buttons with refined styling
         JButton startGameButton = createStyledButton("Start New Game", 250, 150, 300, 50);
         JButton loadGameButton = createStyledButton("Load Game", 250, 220, 300, 50);
         JButton instructionsButton = createStyledButton("Instructions", 250, 290, 300, 50);
         JButton parentalControlsButton = createStyledButton("Parental Controls", 250, 360, 300, 50);
         JButton quitButton = createStyledButton("Quit Game", 600, 20, 150, 40);
 
-        // Add buttons to the frame
-        add(startGameButton);
-        add(loadGameButton);
-        add(instructionsButton);
-        add(parentalControlsButton);
-        add(quitButton);
+        // Add buttons to the gradient panel
+        gradientPanel.add(startGameButton);
+        gradientPanel.add(loadGameButton);
+        gradientPanel.add(instructionsButton);
+        gradientPanel.add(parentalControlsButton);
+        gradientPanel.add(quitButton);
 
-        // Action listeners
+        // Action listeners (same as before)
         startGameButton.addActionListener(e -> startNewGame());
         loadGameButton.addActionListener(e -> loadGame());
         instructionsButton.addActionListener(e -> openInstructionsPage());
         parentalControlsButton.addActionListener(e -> openParentalControls());
-        quitButton.addActionListener(e -> System.exit(0)); // Quit the application
+        quitButton.addActionListener(e -> System.exit(0));
 
-        // In the constructor
-        volumeSlider = new JSlider(0, 100, 100); // Min 0, Max 100, Initial 100
-        volumeSlider.setBounds(250, 430, 300, 50); // Adjust position
+        // Volume slider with improved styling
+        volumeSlider = new JSlider(0, 100, 100);
+        volumeSlider.setBounds(250, 430, 300, 50);
         volumeSlider.setMajorTickSpacing(25);
         volumeSlider.setPaintTicks(true);
         volumeSlider.setPaintLabels(true);
-        add(volumeSlider);
+        volumeSlider.setOpaque(false); // Make slider transparent over gradient
+        gradientPanel.add(volumeSlider);
 
         volumeSlider.addChangeListener(e -> {
             int value = volumeSlider.getValue();
-            float volume = value / 100f; // Convert to 0.0 - 1.0
-        musicPlayer.setVolume(volume);
-        }); // Set volume based on slider value
+            float volume = value / 100f;
+            musicPlayer.setVolume(volume);
+        });
 
-        // Minimize the main menu when a new game starts
+        // Window listener (same as before)
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Ensure music stops when quitting
                 musicPlayer.stopMusic();
             }
         });
@@ -119,7 +143,7 @@ public class MainMenu extends JFrame {
     private JButton createStyledButton(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));
-        button.setBorder(new LineBorder(Color.BLACK, 3)); // Bolder border
+        button.setBorder(new LineBorder(Color.BLUE, 3)); // Bolder border
         button.setBackground(Color.WHITE); // White background
         button.setOpaque(true); // Ensures background color is applied
         button.setFocusPainted(false); // Removes focus outline
