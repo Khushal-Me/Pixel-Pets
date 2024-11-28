@@ -33,7 +33,6 @@ import javax.swing.border.LineBorder;
 public class PetView extends JFrame {
 
   //private final javax.swing.Timer scoreTimer;
-  private int score = 0; // Initialize score to 0
   private final JProgressBar healthBar;
   private final JProgressBar hungerBar;
   private final JProgressBar socialBar;
@@ -50,9 +49,6 @@ public class PetView extends JFrame {
   private final JComboBox<String> personalityComboBox;
   private final JTextArea messageArea;
   private PetController controller;
-  private boolean hungerAlertShown = false;
-  private boolean sleepAlertShown = false;
-  private boolean socialAlertShown = false;
   //private final boolean isDialogOpen = false;
   private final JLabel petImageLabel;
   private final JButton backButton; 
@@ -61,7 +57,7 @@ public class PetView extends JFrame {
   private final JButton useItemButton;
   private final JButton vetButton;
   private final JButton saveButton;
-  private JLabel scoreLabel;
+  private final JLabel scoreLabel;
   private final JButton exerciseButton;
   private JSlider volumeSlider;
 
@@ -250,18 +246,6 @@ public class PetView extends JFrame {
    inventoryPanel.setPreferredSize(new Dimension(300, 500)); // Adjust width and height as needed
    inventoryList.setPreferredSize(new Dimension(300, 500));
 
-  // scoreTimer = new javax.swing.Timer(1000, e -> {
-  //  score++; // Increment the score
-  //  scoreLabel.setText("Score: " + score); // Update the score label
-  //  });
-
-  //  scoreTimer.start(); // Start the timer
-
-    // Initially hide other attributes and buttons
-    toggleAttributesVisibility(false);
-    toggleButtonsVisibility(false);
-    togglePersonalitySelection(true);
-
     // Add a message area to display messages
     messageArea = new JTextArea(20, 30);
     messageArea.setEditable(false); // Make the messageArea read-only
@@ -288,8 +272,6 @@ public class PetView extends JFrame {
       float volume = value / 100f; // Convert to 0.0 - 1.0
       MusicPlayer.getInstance().setVolume(volume);
     });
-
-
     
     // Position the "Back to Main Menu" button at the top left
   backButton.setBounds(20, 10, 200, 40); // x, y, width, height
@@ -311,8 +293,6 @@ public class PetView extends JFrame {
   inventoryPanel.setBounds(465, 260, 240, 140); // Adjust for compactness
   panel.add(inventoryPanel);
 
-  
-  
 
   volumeSlider.setBounds(0, 520, 150, 50); // Adjust slider width and position
   panel.add(volumeSlider);
@@ -334,28 +314,20 @@ public class PetView extends JFrame {
   getPreferredActionButton.setBounds(96, 480, 200, 40);
   performPreferredActionButton.setBounds(380, 500, 200, 40);
 
-
-
-
-    panel.add(moodLabel);
-    panel.add(personalityLabel);
-    panel.add(exerciseButton);
-    panel.add(feedButton);
-    panel.add(playButton);
-    panel.add(sleepButton);
-    panel.add(vetButton);
-    panel.add(backButton);
-    panel.add(getPreferredActionButton);
-    panel.add(performPreferredActionButton);
-    panel.add(saveButton);
-    panel.add(scrollPane);
-    panel.add(inventoryPanel);
-
-
-              // Initialize the timer to update the score every second
-
-    add(panel);
-
+  panel.add(moodLabel);
+  panel.add(personalityLabel);
+  panel.add(exerciseButton);
+  panel.add(feedButton);
+  panel.add(playButton);
+  panel.add(sleepButton);
+  panel.add(vetButton);
+  panel.add(backButton);
+  panel.add(getPreferredActionButton);
+  panel.add(performPreferredActionButton);
+  panel.add(saveButton);
+  panel.add(scrollPane);
+  panel.add(inventoryPanel);
+  add(panel);
   }
 
 /**
@@ -438,19 +410,19 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     PersonalityStrategy selectedPersonality;
     selectedPersonality = switch (petName) {
         case "Dog" -> {
-            messageArea.append("The Dog pet was selected.\n");
+        //    messageArea.append("The Dog pet was selected.\n");
             yield new Dog();
         }
         case "Cat" -> {
-            messageArea.append("The Cat pet was selected.\n");
+        //    messageArea.append("The Cat pet was selected.\n");
             yield new Cat();
         }
         case "Bird" -> {
-            messageArea.append("The Bird pet was selected.\n");
+        //    messageArea.append("The Bird pet was selected.\n");
             yield new Bird();
         }
         default -> {
-            messageArea.append("The Bird pet was selected.\n");
+        //    messageArea.append("The Bird pet was selected.\n");
             yield new Bird();
         }
     };
@@ -458,9 +430,6 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     return selectedPersonality;
 }
 
-  /**
-   * This method displays the personality selection dialog.
-   */
   /**
    * This method appends a message to the message area.
    *
@@ -535,7 +504,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
    * @param personality the personality to be displayed
    */
   public void updatePersonality(String personality) {
-    personalityLabel.setText("Personality: " + personality);
+    personalityLabel.setText("Pixel Pet: " + personality);
   }
 
   /**
@@ -677,99 +646,6 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
   }
 
   /**
-   * This method displays the hunger alert.
-   */
-  public void displayHungerAlert() {
-    if (!hungerAlertShown) {
-      Object[] options = {"Feed", "Dismiss"};
-      int choice = JOptionPane.showOptionDialog(
-          this, // Use 'this' to tie the dialog to the game window
-          "Your pet is hungry!",
-          "Hunger Alert",
-          JOptionPane.YES_NO_OPTION,
-          JOptionPane.WARNING_MESSAGE,
-          null,
-          options,
-          options[0]
-      );
-
-      if (choice == JOptionPane.YES_OPTION) {
-        controller.handleFeedAction(); // Call the method in the controller to feed the pet
-      }
-      hungerAlertShown = true;
-    }
-  }
-
-  /**
-   * This method displays the social alert.
-   */
-  public void displaySocialAlert() {
-    if (!socialAlertShown) {
-      Object[] options = {"Play", "Dismiss"};
-      int choice = JOptionPane.showOptionDialog(
-          this, // Use 'this' to tie the dialog to the game window
-          "Your pet is lonely!",
-          "Social Alert",
-          JOptionPane.YES_NO_OPTION,
-          JOptionPane.WARNING_MESSAGE,
-          null,
-          options,
-          options[0]
-      );
-
-      if (choice == JOptionPane.YES_OPTION) {
-        controller.handlePlayAction(); // Call the method in the controller to play with the pet
-      }
-      socialAlertShown = true;
-    }
-  }
-
-  /**
-   * This method displays the sleep alert.
-   */
-  public void displaySleepAlert() {
-    if (!sleepAlertShown) {
-      Object[] options = {"Sleep", "Dismiss"};
-      int choice = JOptionPane.showOptionDialog(
-          this, // Parent the dialog to the game window,
-          "Your pet is sleepy!",
-          "Sleep Alert",
-          JOptionPane.YES_NO_OPTION,
-          JOptionPane.WARNING_MESSAGE,
-          null,
-          options,
-          options[0]
-      );
-
-      if (choice == JOptionPane.YES_OPTION) {
-        controller.handleSleepAction(); // Call the method in the controller to put the pet to sleep
-      }
-      sleepAlertShown = true;
-    }
-  }
-
-  /**
-   * This method resets the hunger alert.
-   */
-  public void resetHungerAlert() {
-    hungerAlertShown = false;
-  }
-
-  /**
-   * This method resets the sleep alert.
-   */
-  public void resetSleepAlert() {
-    sleepAlertShown = false;
-  }
-
-  /**
-   * This method resets the social alert.
-   */
-  public void resetSocialAlert() {
-    socialAlertShown = false;
-  }
-
-  /**
    * This method resets the view.
    */
   public void reset() {
@@ -788,20 +664,13 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
 
     togglePersonalitySelection(true);
 
-    resetHungerAlert();
-    resetSleepAlert();
-    resetSocialAlert();
+    //resetHungerAlert();
+    //resetSleepAlert();
+    //resetSocialAlert();
 
     displayPetSelectionDialog();
   }
 
-  /**
-   * This method displays the preferred action change message.
-   */
-  public void displayPreferredActionChangeMessage() {
-    JOptionPane.showMessageDialog(this, "The pet's preferred action is changing.", "Action Change",
-        JOptionPane.INFORMATION_MESSAGE);
-  }
   public void setActionButtonsEnabled(boolean enabled) {
     feedButton.setEnabled(enabled);
     playButton.setEnabled(enabled);
@@ -837,6 +706,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
         }
     }
 }
+
     public void updateInventory(List<Item> items) {
         inventoryListModel.clear();
         for (Item item : items) {

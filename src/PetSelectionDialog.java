@@ -84,7 +84,7 @@ public class PetSelectionDialog extends JDialog {
         selectPetButton.addActionListener(e -> {
             if (selectedPet != null) {
                 // Proceed to start the game
-                JOptionPane.showMessageDialog(this, "Starting game with: " + selectedPet);
+                JOptionPane.showMessageDialog(this, "Your Pixel Pet will be a " + selectedPet);
                 dispose(); // Close the dialog immediately
 
                 // Start the game with the selected pet

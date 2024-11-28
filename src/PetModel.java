@@ -113,11 +113,6 @@ public interface PetModel {
    */
   public boolean checkDeath();
 
-  /**
-   * Check if the pet's health status.
-   * @return the health status of the pet.
-   */
-  public String checkPetHealthStatus();
 
   /**
    * Get the last interacted time of the pet.

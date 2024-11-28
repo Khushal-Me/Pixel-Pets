@@ -53,10 +53,6 @@ public class PetSimulation {
       myPet.setPreferredAction(Action.SLEEP);
       myPet.performPreferredAction();
 
-      // Check pet's health status and mood
-      String healthStatus = myPet.checkPetHealthStatus();
-      writer.println("Pet Health Status: " + healthStatus);
-
       Mood petMood = myPet.getMood();
       writer.println("Pet Mood: " + petMood);
 

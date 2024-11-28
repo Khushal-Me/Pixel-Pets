@@ -61,7 +61,6 @@ public class Pet implements PetModel, Serializable {
   private PersonalityStrategy personality;
   private Action preferredAction;
   private long lastInteractedTime;
-  private int checkCount = 0;  // Counter to track the number of checks
   private boolean isSleeping;
   private boolean personalitySet = false;
   private String message;
@@ -406,11 +405,13 @@ public class Pet implements PetModel, Serializable {
 
 
   public void increasescore() {
-    score += 5;
+    Random random = new Random();
+    int randomIncrement = random.nextInt(20) + 1; // Random value between 1 and 20
+    score += randomIncrement;
     if (score > 100000) {
-      score = 100000;
+        score = 100000;
     }
-  }
+}
 
   /**
    * Increase the sleep level of the pet.
@@ -530,27 +531,6 @@ public class Pet implements PetModel, Serializable {
     return isDead;
   }
 
-  /**
-   * Check the health status of the pet.
-   */
-  @Override
-  public String checkPetHealthStatus() {
-      checkCount++;  // Increment the counter on each check
-  
-      // Delay the pop-up by returning an empty string for the first two checks
-      if (checkCount <= 2) {
-          return "";  // Skip the alert for the first two checks
-      }
-  
-      // After 2 checks, show the health status
-      if (health > 70) {
-          return "Your pet is healthy!";
-      } else if (health > 30) {
-          return "Your pet is fine!";
-      } else {
-          return "Your pet is sick!";
-      }
-  }
 
   /**
    * Adjust the behavior of the pet.

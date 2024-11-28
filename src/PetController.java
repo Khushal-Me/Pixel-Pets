@@ -34,7 +34,6 @@ public class PetController {
   private final Pet model;
   private final PetView view;
   private final MainMenu mainMenu;
-  private String previousHealthStatus = "";
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
   private Action previousPreferredAction = null;
   private boolean isFirstActionSet = true;
@@ -127,7 +126,6 @@ public class PetController {
     long lastInteractedTime = model.getLastInteractedTime();
     view.updateLastInteractedTime(lastInteractedTime);
     view.updatePetImage(model.getPetName(), model.checkDeath(), model.isSleeping()); // Update pet image based on sleeping state
-    updateHealthStatus();
     checkForPreferredActionChange();
 
     if (model.checkDeath()) {
@@ -135,31 +133,18 @@ public class PetController {
         handlePetDeath();
     } else {
         if (model.getHunger() > 60) {
-            view.displayHungerAlert();
+            //view.displayHungerAlert();
         }
     }
 }
 
-  /**
-   * This method updates the health status of the pet.
-   */
-  public void updateHealthStatus() {
-    String currentHealthStatus = model.checkPetHealthStatus();
 
-    if (!currentHealthStatus.equals(previousHealthStatus)) {
-      view.displayHealthStatusMessage(currentHealthStatus);
-      previousHealthStatus = currentHealthStatus;
-    }
-  }
 
   /**
    * This method checks if the preferred action has changed.
    */
   private void checkForPreferredActionChange() {
     Action currentPreferredAction = model.getPreferredAction();
-    if (!isFirstActionSet && currentPreferredAction != previousPreferredAction) {
-      view.displayPreferredActionChangeMessage();
-    }
 
     if (previousPreferredAction != currentPreferredAction) {
       previousPreferredAction = currentPreferredAction;
@@ -176,7 +161,6 @@ public class PetController {
     model.reset();
     model.stopItemGenerator();
     // Reset any other necessary states or flags
-    previousHealthStatus = "";
     isFirstActionSet = true;
     // Reset deathHandled flag
     deathHandled = false;
