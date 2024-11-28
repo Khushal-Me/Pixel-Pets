@@ -1,11 +1,10 @@
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
-
 import javax.swing.*;
-import java.awt.*;
 import javax.swing.border.LineBorder;
 /**
  * The {@code PetView} class provides the graphical user interface (GUI) for interacting 
@@ -33,12 +32,12 @@ import javax.swing.border.LineBorder;
  */
 public class PetView extends JFrame {
 
-  private javax.swing.Timer scoreTimer;
+  //private final javax.swing.Timer scoreTimer;
   private int score = 0; // Initialize score to 0
-  private JProgressBar healthBar;
-  private JProgressBar hungerBar;
-  private JProgressBar socialBar;
-  private JProgressBar sleepBar;
+  private final JProgressBar healthBar;
+  private final JProgressBar hungerBar;
+  private final JProgressBar socialBar;
+  private final JProgressBar sleepBar;
   private final JLabel moodLabel;
   private final JLabel personalityLabel;
   private final JLabel lastInteractedLabel;
@@ -54,14 +53,14 @@ public class PetView extends JFrame {
   private boolean hungerAlertShown = false;
   private boolean sleepAlertShown = false;
   private boolean socialAlertShown = false;
-  private final boolean isDialogOpen = false;
+  //private final boolean isDialogOpen = false;
   private final JLabel petImageLabel;
   private final JButton backButton; 
   private final DefaultListModel<String> inventoryListModel;
   private final JList<String> inventoryList;
   private final JButton useItemButton;
   private final JButton vetButton;
-  private JButton saveButton;
+  private final JButton saveButton;
   private JLabel scoreLabel;
   private final JButton exerciseButton;
   private JSlider volumeSlider;
@@ -251,12 +250,12 @@ public class PetView extends JFrame {
    inventoryPanel.setPreferredSize(new Dimension(300, 500)); // Adjust width and height as needed
    inventoryList.setPreferredSize(new Dimension(300, 500));
 
-   scoreTimer = new javax.swing.Timer(1000, e -> {
-    score++; // Increment the score
-    scoreLabel.setText("Score: " + score); // Update the score label
-    });
+  // scoreTimer = new javax.swing.Timer(1000, e -> {
+  //  score++; // Increment the score
+  //  scoreLabel.setText("Score: " + score); // Update the score label
+  //  });
 
-    scoreTimer.start(); // Start the timer
+  //  scoreTimer.start(); // Start the timer
 
     // Initially hide other attributes and buttons
     toggleAttributesVisibility(false);
@@ -354,9 +353,6 @@ public class PetView extends JFrame {
 
 
               // Initialize the timer to update the score every second
-    
-
-    
 
     add(panel);
 
@@ -487,6 +483,9 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     healthBar.setForeground(Color.gray); 
   }
 
+  public void updateScore(int score) {
+    scoreLabel.setText("Score: " + score);
+  }
 
   /**
    * This method updates the hunger label.
@@ -862,6 +861,7 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
   }
 
   public void updateViewWithModel(Pet model) {
+    updateScore(model.getscore());
     updateHealth(model.getHealth());
     updateHunger(model.getHunger());
     updateSocial(model.getSocial());

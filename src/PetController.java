@@ -111,6 +111,7 @@ public class PetController {
    * This method updates the view.
    */
   private void updateView() {
+    view.updateScore(model.getscore());
     view.updateHealth(model.getHealth());
     view.updateHunger(model.getHunger());
     view.updateSocial(model.getSocial());

@@ -46,6 +46,7 @@ public class Pet implements PetModel, Serializable {
   private static final String SAVE_FILE_PREFIX = "saves/pet_save_";
 
   private transient ScheduledExecutorService autosaveService;
+  private int score;
   private int hunger;
   private int social;
   private int sleep;
@@ -74,6 +75,7 @@ public class Pet implements PetModel, Serializable {
    * Constructor for the Pet class.
    */
   public Pet() {
+    score = 0;
     hunger = 20;
     social = 80;
     sleep = 20;
@@ -131,6 +133,19 @@ public class Pet implements PetModel, Serializable {
     this.hunger = hunger;
   }
 
+
+
+  public void setscore(int score) {
+    if (score < 0) {
+      score = 0;
+      System.out.println("The minimum score is 0.");
+    }
+    if (score > 100000) {
+      score = 100000;
+      System.out.println("The maximum score is 100000.");
+    }
+    this.score = score;
+  }
 
   /**
    * Set the social level of the pet.
@@ -267,6 +282,15 @@ public class Pet implements PetModel, Serializable {
   }
 
   /**
+   * Get the current score of the pet.
+   */
+  @Override
+  public int getscore() {
+    checkBounds();
+    return score;
+  }
+
+  /**
    * Get the current social level of the pet.
    */
   @Override
@@ -325,6 +349,7 @@ public class Pet implements PetModel, Serializable {
   public String displayStates() {
     checkBounds();
     String[] states = new String[] {
+        "score: " + score,
         "Hunger: " + hunger,
         "Social: " + social,
         "Sleep: " + sleep,
@@ -379,6 +404,14 @@ public class Pet implements PetModel, Serializable {
     }
   }
 
+
+  public void increasescore() {
+    score += 5;
+    if (score > 100000) {
+      score = 100000;
+    }
+  }
+
   /**
    * Increase the sleep level of the pet.
    */
@@ -403,6 +436,7 @@ public class Pet implements PetModel, Serializable {
    * Check if the pet's attributes are within the bounds.
    */
   public void checkBounds() {
+    score = Math.min(Math.max(score, 0), 100000);
     hunger = Math.min(Math.max(hunger, 0), 100);
     social = Math.min(Math.max(social, 0), 100);
     sleep = Math.min(Math.max(sleep, 0), 100);
@@ -538,7 +572,6 @@ public class Pet implements PetModel, Serializable {
       personalitySet = true;
     } else {
       System.out.println("Personality has already been set and cannot be changed.");
-      // You can throw an exception or handle it as per your application's flow
     }
   }
 
@@ -560,6 +593,7 @@ public class Pet implements PetModel, Serializable {
    * Reset the pet model.
    */
   public void reset() {
+    score = 0;
     hunger = 20;
     social = 80;
     sleep = 20;
@@ -709,23 +743,23 @@ public void startItemGenerator() {
 }
 
 private void addItemToInventory() {
-  Random random = new Random();
-  int itemType = random.nextInt(3); // 0 for Meat, 1 for Vegetables, 2 for Juice
+    Random random = new Random();
+    int itemType = random.nextInt(3); // 0 for Meat, 1 for Vegetables, 2 for Juice
 
-  switch (itemType) {
-    case 0:
-        Meat meat = new Meat();
-        inventory.addItem(meat);
-        break;
-    case 1:
-        Vegetables vegetables = new Vegetables();
-        inventory.addItem(vegetables);
-        break;
-    case 2:
-        Juice juice = new Juice();
-        inventory.addItem(juice);
-        break;
-  }
+    switch (itemType) {
+      case 0 -> {
+          Meat meat = new Meat();
+          inventory.addItem(meat);
+      }
+      case 1 -> {
+          Vegetables vegetables = new Vegetables();
+          inventory.addItem(vegetables);
+      }
+      case 2 -> {
+          Juice juice = new Juice();
+          inventory.addItem(juice);
+      }
+    }
 }
 
 public void stopItemGenerator() {
@@ -738,7 +772,7 @@ public void stopItemGenerator() {
 public void receiveGift() {
   // Implement the effect of receiving a gift
   // For example, increase social or mood attributes
-  social = Math.min(social + 20, 100);
+  social = Math.min(social + 21, 100);
   mood = Mood.HAPPY;
 }
 public void increaseHealth(int amount) {
@@ -746,6 +780,7 @@ public void increaseHealth(int amount) {
 }
 
 public void updateFrom(Pet other) {
+  this.score = other.score;
   this.hunger = other.hunger;
   this.social = other.social;
   this.sleep = other.sleep;
@@ -771,6 +806,7 @@ public void reinitializeServices() {
 }
 public void revive() {
   if (isDead) {
+      score = 0;
       health = 100;
       hunger = 0; // Set hunger to minimum
       social = 100; // Set social to maximum

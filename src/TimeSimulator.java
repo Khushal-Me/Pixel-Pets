@@ -63,6 +63,7 @@ public class TimeSimulator implements Serializable {
    * Update the pet's attributes.
    */
   private void updateAttributes() {
+    pet.increasescore();
     pet.increaseHunger();
     pet.increaseSleep();
     pet.decreaseSocial();

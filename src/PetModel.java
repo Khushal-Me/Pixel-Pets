@@ -53,6 +53,13 @@ public interface PetModel {
    */
   public int getHunger();
 
+
+  /**
+   * Get the current score of the pet.
+   * @return the current score of the pet.
+   */
+  public int getscore();
+
   /**
    * Get the current social level of the pet.
    * @return the current social level of the pet.
