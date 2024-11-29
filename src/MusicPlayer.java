@@ -1,23 +1,26 @@
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.*;
+
 /**
  * A singleton class that manages audio playback functionality for the application.
  * This class provides methods to play, stop, and control background music.
  * It implements the singleton pattern to ensure only one instance of the music player exists.
  * 
  * The class supports:
- * - Playing audio files with continuous looping
- * - Stopping currently playing music
- * - Changing between different music tracks
- * - Volume control
+ * <ul>
+ *   <li>Playing audio files with continuous looping</li>
+ *   <li>Stopping currently playing music</li>
+ *   <li>Changing between different music tracks</li>
+ *   <li>Volume control</li>
+ * </ul>
  * 
  * Usage example:
- * {@code
+ * <pre>{@code
  * MusicPlayer player = MusicPlayer.getInstance();
  * player.playMusic("path/to/music.wav");
  * player.setVolume(0.5f);
- * }
+ * }</pre>
  * 
  * @author Ramje, Khushal
  * @version 1.0
@@ -53,6 +56,7 @@ public class MusicPlayer {
      * The music will loop continuously until {@link #stopMusic()} is called.
      *
      * @param filePath the path to the music file to be played
+     * @throws IllegalArgumentException if the music file cannot be found or opened
      */
     public void playMusic(String filePath) {
         stopMusic(); // Stop any currently playing music
@@ -79,6 +83,13 @@ public class MusicPlayer {
             System.err.println("An error occurred while playing music: " + ex.getMessage());
         }
     }
+
+    /**
+     * Sets the volume of the music.
+     * The volume is adjusted on a scale from 0.0 (minimum) to 1.0 (maximum).
+     *
+     * @param volume the desired volume, where 0.0 is the minimum and 1.0 is the maximum
+     */
     public void setVolume(float volume) {
         if (volumeControl != null) {
             float min = volumeControl.getMinimum();
@@ -87,7 +98,6 @@ public class MusicPlayer {
             volumeControl.setValue(volumeDb);
         }
     }
-
 
     /**
      * Stops the currently playing music, if any.

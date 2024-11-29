@@ -21,15 +21,18 @@ import javax.swing.border.LineBorder;
  * @author Ramje, Khushal
  * @version 1.0
  * 
- * @see MainMenu
- * @see PetController
- * @see PetView
- * @see Pet
+ * @see JDialog
  */
 public class PetSelectionDialog extends JDialog {
     private String selectedPet = null; // Holds the selected pet's name
     private JButton selectedButton = null; // Keeps track of the currently selected button
 
+
+    /**
+     * Creates a new PetSelectionDialog with the specified parent frame.
+     * 
+     * @param parent the parent frame to center the dialog on
+     */
     public PetSelectionDialog(JFrame parent) {
         super(parent, "Select Your Pet", true);
         setLayout(new BorderLayout());
@@ -112,6 +115,16 @@ public class PetSelectionDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
+
+    /**
+     * 
+     * Creates a JButton with an image and text for a pet option.
+     * 
+     * @param petName
+     * @param imagePath
+     * @return
+     */
+
     private JButton createPetButton(String petName, String imagePath) {
         java.net.URL imgURL = getClass().getResource(imagePath);
         if (imgURL == null) {
@@ -139,6 +152,15 @@ public class PetSelectionDialog extends JDialog {
         return button;
     }
     
+
+    /**
+     * Creates a styled JButton for the top panel with the specified text, width, and height.
+     * 
+     * @param text
+     * @param width
+     * @param height
+     * @return
+     */
     private JButton createTopButton(String text, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -160,6 +182,15 @@ public class PetSelectionDialog extends JDialog {
         return button;
     }
 
+
+    /**
+     * Creates a styled JButton with the specified text, width, and height.
+     * 
+     * @param text
+     * @param width
+     * @param height
+     * @return
+     */
     private JButton createStyledButton(String text, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -181,10 +212,20 @@ public class PetSelectionDialog extends JDialog {
         return button;
     }
 
+
+    /**
+     * Returns the name of the selected pet.
+     * 
+     * @return the selected pet's name
+     */
     public String getSelectedPet() {
         return selectedPet;
     }
 
+
+    /**
+     * Deselects the currently selected pet.
+     */
     private void deselectPet() {
         selectedPet = null;  // Clear the selection
         if (selectedButton != null) {
@@ -193,6 +234,12 @@ public class PetSelectionDialog extends JDialog {
         }
     }
 
+
+    /**
+     * Starts the game with the selected pet.
+     * 
+     * @param selectedPet the name of the selected pet
+     */
     private void startGame(String selectedPet) {
         // Proceed to start the game with the selected pet
         Pet petModel = new Pet();
@@ -214,6 +261,12 @@ public class PetSelectionDialog extends JDialog {
         });
     }
 
+
+    /**
+     * Main method to start the application.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             PetSelectionDialog dialog = new PetSelectionDialog(null);

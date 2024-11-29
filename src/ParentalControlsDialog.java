@@ -32,6 +32,19 @@ public class ParentalControlsDialog extends JDialog {
     private JLabel setPlaytimeTitleLabel;
     private final MainMenu mainMenu;
 
+    /**
+     * A dialog window that provides parental control features for the game.
+     * This dialog requires a password for access and includes functionality for:
+     * - Viewing player statistics
+     * - Setting playtime restrictions
+     * - Resetting player statistics
+     * - Reviving pets
+     * - Navigation controls to return to main menu or quit the game
+     *
+     * The dialog is modal, meaning it blocks input to other windows while open.
+     *
+     * @param mainMenu The main menu instance that created this dialog
+     */
     public ParentalControlsDialog(MainMenu mainMenu) {
         super(mainMenu, "Parental Controls", true);
         this.mainMenu = mainMenu;
@@ -134,6 +147,17 @@ public class ParentalControlsDialog extends JDialog {
         setVisible(true);
     }
 
+    /**
+     * Creates and configures a styled button with consistent appearance and hover effects.
+     *
+     * @param text The text to display on the button
+     * @return A configured JButton with:
+     *         - Arial font, size 20
+     *         - Black border (3px)
+     *         - White background
+     *         - Fixed size of 220x40 pixels
+     *         - Hover effect (light gray background when mouse enters)
+     */
     private JButton createTopButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -159,6 +183,19 @@ public class ParentalControlsDialog extends JDialog {
         return button;
     }
 
+    /**
+     * Creates a styled JButton with consistent visual properties and hover effects.
+     * 
+     * The button is styled with:
+     * - Arial font, size 16
+     * - Black border with 3px width
+     * - White background
+     * - Fixed size of 150x40 pixels
+     * - Hover effect changing background to light gray
+     *
+     * @param text The text to display on the button
+     * @return A styled JButton instance with the specified text and styling
+     */
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -184,6 +221,14 @@ public class ParentalControlsDialog extends JDialog {
         return button;
     }
 
+    /**
+     * Saves the parental control settings by updating the playtime restriction.
+     * Attempts to parse the user input from the playtime field and set it as the new restriction.
+     * Displays a success message if the settings are saved successfully.
+     * If the input is not a valid number, shows an error message to the user.
+     * 
+     * @throws NumberFormatException if the text in playTimeField cannot be parsed as an integer
+     */
     private void saveSettings() {
         try {
             int restriction = Integer.parseInt(playTimeField.getText());
@@ -194,6 +239,13 @@ public class ParentalControlsDialog extends JDialog {
         }
     }
 
+    /**
+     * Resets all player statistics to their initial values.
+     * This method:
+     * - Sets the total play time back to 0 minutes
+     * - Updates the display label to show 0 minutes
+     * - Shows a confirmation message to the user
+     */
     private void resetPlayerStatistics() {
      
         int currentPlayTime = mainMenu.getTotalPlayTime();
@@ -207,6 +259,21 @@ public class ParentalControlsDialog extends JDialog {
     }
     
 
+    /**
+     * Revives a pet from a specified save slot.
+     * This method prompts the user to enter a save slot number (1-3),
+     * loads the pet from the selected slot, restores its vital statistics
+     * to optimal levels, and saves the revived pet back to the same slot.
+     * 
+     * The revival process includes:
+     * - Setting health to 100%
+     * - Resetting hunger to 0
+     * - Setting social level to 100%
+     * - Resetting sleep need to 0
+     * 
+     * If an invalid slot number is entered or if the pet cannot be loaded,
+     * appropriate error messages are displayed to the user.
+     */
     private void revivePet() {
         String slot = JOptionPane.showInputDialog(
             this,

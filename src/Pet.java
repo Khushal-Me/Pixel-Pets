@@ -38,9 +38,6 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @see PetModel
  * @see Serializable
- * @see PersonalityStrategy
- * @see Inventory
- * @see TimeSimulator
  */
 public class Pet implements PetModel, Serializable {
   private static final long serialVersionUID = 1L;
@@ -93,7 +90,11 @@ public class Pet implements PetModel, Serializable {
   }
 
   /**
-   * Start the timer.
+   * Initiates a timer for periodic pet status updates.
+   * The timer runs every 5 seconds with an initial delay of 3 seconds.
+   * If more than 1 second has passed since the last interaction,
+   * it triggers attribute updates via the timeSimulator.
+   * The timer automatically shuts down if the pet's health reaches zero.
    */
   public void startTimer() {
     executorService1.scheduleAtFixedRate(() -> {
@@ -113,6 +114,10 @@ public class Pet implements PetModel, Serializable {
     }
   }
 
+  /**
+   * Enables task execution for a pet by setting the allowTaskExecution flag to true.
+   * This method allows the pet to perform tasks after being called.
+   */
   public void setAllowTaskExecution() {
     allowTaskExecution = true;
   }
@@ -136,6 +141,13 @@ public class Pet implements PetModel, Serializable {
 
 
 
+  /**
+   * Sets the score for the pet.
+   * If the score is less than 0, it will be set to 0.
+   * If the score is greater than 100000, it will be set to 100000.
+   *
+   * @param score the score to be set, will be clamped between 0 and 100000
+   */
   public void setscore(int score) {
     if (score < 0) {
       score = 0;
@@ -241,8 +253,11 @@ public class Pet implements PetModel, Serializable {
   }
 
   /**
-   * Put the pet to sleep, the sleep level will decrease by 10 and the health level will increase by
-   * 5.
+   * Puts the pet to sleep for a fixed duration of 10 seconds.
+   * The pet will automatically wake up after the sleep period.
+   * Updates the last interaction time and changes the pet's sleeping state.
+   * 
+   * @throws IllegalStateException if the pet is already sleeping
    */
   @Override
   public void sleep() throws IllegalStateException {
@@ -257,7 +272,7 @@ public class Pet implements PetModel, Serializable {
   } else {
       throw new IllegalStateException("Pet is already sleeping");
   }
-}
+  }
 
   /**
    * Wake the pet up.
@@ -275,6 +290,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the current hunger level of the pet.
+   * 
+   * @return the hunger level of the pet
    */
   @Override
   public int getHunger() {
@@ -284,6 +301,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the current score of the pet.
+   * 
+   * @return the score of the pet
    */
   @Override
   public int getscore() {
@@ -293,6 +312,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the current social level of the pet.
+   * 
+   * @return the social level of the pet
    */
   @Override
   public int getSocial() {
@@ -302,6 +323,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the current sleep level of the pet.
+   * 
+   * @return the sleep level of the pet
    */
   @Override
   public int getSleep() {
@@ -311,6 +334,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the current health level of the pet.
+   * 
+   * @return the health level of the pet
    */
   @Override
   public int getHealth() {
@@ -320,6 +345,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the personality of the pet.
+   * 
+   * @return the personality of the pet
    */
   @Override
   public PersonalityStrategy getPersonality() {
@@ -328,6 +355,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the last time the pet was interacted with.
+   * 
+   * @return the last interacted time
    */
   @Override
   public long getLastInteractedTime() {
@@ -337,7 +366,7 @@ public class Pet implements PetModel, Serializable {
   /**
    * Get the message.
    *
-   * @return the message.
+   * @return the message to be displayed
    */
   public String getMessage() {
     return message;
@@ -345,6 +374,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Display the attributes: hunger, sleep, social, of the pet.
+   * 
+   * @return the attributes of the pet
    */
   @Override
   public String displayStates() {
@@ -448,6 +479,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the mood of the pet.
+   * 
+   * @return the mood of the pet
    */
   @Override
   public Mood getMood() {
@@ -461,6 +494,7 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Perform the preferred action.
+   * 
    */
   @Override
   public void performPreferredAction() {
@@ -518,6 +552,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Get the preferred action.
+   * 
+   * @return the preferred action
    */
   @Override
   public Action getPreferredAction() {
@@ -526,6 +562,8 @@ public class Pet implements PetModel, Serializable {
 
   /**
    * Check if the pet is dead.
+   * 
+   * @return true if the pet is dead, false otherwise
    */
   @Override
   public boolean checkDeath() {
@@ -609,8 +647,14 @@ public class Pet implements PetModel, Serializable {
 
   }
 
-/*
- * auto save class
+
+/**
+ * Starts an automatic save operation that periodically saves the pet data to the specified slot.
+ * If an auto-save operation is already running, it is stopped before starting the new one.
+ *
+ * @param slot     The save slot identifier where the pet data will be saved
+ * @param interval The time duration between consecutive auto-saves
+ * @param unit     The time unit for the interval (e.g., SECONDS, MINUTES)
  */
 public void startAutoSave(String slot, long interval, TimeUnit unit) {
   if (autoSaveExecutor != null) {
@@ -620,16 +664,18 @@ public void startAutoSave(String slot, long interval, TimeUnit unit) {
   autoSaveExecutor.scheduleAtFixedRate(() -> save(slot), interval, interval, unit);
 }
 
+/**
+ * Stops the automatic save operation.
+ */
 public void stopAutoSave() {
   if (autoSaveExecutor != null) {
       autoSaveExecutor.shutdownNow();
   }
 }
- 
-
 
   /**
-     * Save the pet's state to a file.
+  * Save the pet's state to a file.
+  * @param slot the save slot identifier
   */
   public void save(String slot) {
     // Ensure the saves directory exists
@@ -652,7 +698,10 @@ public void stopAutoSave() {
       /**
      * Load the pet's state from a file.
      *
+     * @param slot the save slot identifier
+     * 
      * @return the loaded Pet object
+     * @return null if the file does not exist or an error occurs
      */
     public static Pet load(String slot) {
       // Construct the file path
@@ -708,6 +757,12 @@ public void stopAutoSave() {
     return petName;
 }
 
+/**
+ * Set the name of the pet.
+ * 
+ * @param petName
+ */
+
   public void setPetName(String petName) {
     this.petName = petName;
 }
@@ -757,9 +812,22 @@ public void receiveGift() {
   social = Math.min(social + 21, 100);
   mood = Mood.HAPPY;
 }
+
+/**
+ * Increase the pet's health by a specified amount.
+ * 
+ * @param amount
+ */
+
 public void increaseHealth(int amount) {
   health = Math.min(health + amount, 100);
 }
+
+/**
+ * Update the pet's attributes based on another pet's state.
+ * 
+ * @param other
+ */
 
 public void updateFrom(Pet other) {
   this.score = other.score;
@@ -776,9 +844,13 @@ public void updateFrom(Pet other) {
   this.message = other.message;
   this.isDead = other.isDead;
   this.allowTaskExecution = other.allowTaskExecution;
-  // Add any other fields that need to be updated
 }
-// Add this method to reinitialize services after revival
+
+/**
+ * Get the pet's inventory.
+ * 
+ * @return the pet's inventory
+ */
 public void reinitializeServices() {
   if (timeSimulator == null) {
     timeSimulator = new TimeSimulator(this);
@@ -786,6 +858,11 @@ public void reinitializeServices() {
   }
   startItemGenerator(); // Restart item generator
 }
+
+/**
+ * Revive the pet after it has died.
+ * Resets the pet's attributes to initial values and reinitializes any necessary services.
+ */
 public void revive() {
   if (isDead) {
       score = 0;
@@ -804,6 +881,11 @@ public void revive() {
       reinitializeServices();
   }
 }
+/**
+ * Get the pet's inventory.
+ * 
+ * @return the pet's inventory
+ */
 @Override
 public void exercise() {
     if (isSleeping) {
@@ -818,9 +900,20 @@ public void exercise() {
     lastInteractedTime = System.currentTimeMillis();
     checkBounds();
 }
+
+/**
+* Put the pet to sleep for a fixed duration of 10 seconds.
+ * @return
+ */
 public boolean isSleeping() {
   return isSleeping;
 }
+
+/**
+ * Feed the pet meat.
+ * 
+ * @return
+ */
 public void feedMeat() {
   if (isSleeping) {
       message = "Pet is sleeping. Please wait until it wakes up.";
@@ -837,6 +930,11 @@ public void feedMeat() {
   checkBounds();
 }
 
+/**
+ * Feed the pet vegetables.
+ * 
+ * @return
+ */
 public void feedVegetables() {
   if (isSleeping) {
       message = "Pet is sleeping. Please wait until it wakes up.";
@@ -853,6 +951,12 @@ public void feedVegetables() {
   checkBounds();
 }
 
+
+/**
+ * Feed the pet juice.
+ * 
+ * @return
+ */
 public void feedJuice() {
   if (isSleeping) {
       message = "Pet is sleeping. Please wait until it wakes up.";

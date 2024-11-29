@@ -33,16 +33,7 @@ import javax.swing.border.LineBorder;
  * @author Chris, Jonathan, Ramje, Khushal
  * @version 1.0
  * 
- * @see PetController
- * @see PersonalityStrategy
- * @see PetSelectionDialog
- * @see Pet
- * @see Item
- * @see Action
- * @see MusicPlayer
- * @see Mood
- * @see Inventory
- * @see PetSimulation
+ * @see JFrame
  * 
  */
 public class PetView extends JFrame {
@@ -361,6 +352,14 @@ public void displayPetSelectionDialog() {
   }
 }
 
+
+  /**
+   * This method updates the pet image based on its state.
+   *
+   * @param petName the name of the pet
+   * @param isDead whether the pet is dead
+   * @param isSleeping whether the pet is sleeping
+   */
 public void updatePetImage(String petName, boolean isDead, boolean isSleeping) {
   String imagePath;
   if (isDead) {
@@ -396,10 +395,22 @@ public void setController(PetController controller) {
         this.controller = controller;
   }
 
+
+  /**
+   * This method adds a confirm button listener to the confirm button.
+   *
+   * @param listener the listener to be added
+   */
 public void addBackButtonListener(ActionListener listener) {
     backButton.addActionListener(listener);
 }
 
+
+  /**
+   * This method adds a save button listener to the save button.
+   *
+   * @param saveListener the listener to be added
+   */
 public void addSaveListener(ActionListener saveListener) {
     saveButton.addActionListener(saveListener);
 }
@@ -408,7 +419,7 @@ public void addSaveListener(ActionListener saveListener) {
   /**
    * This method notifies the controller of the personality choice.
    *
-   * @param choice the index of the personality
+   * @param petName the name of the pet
    */
 public void notifyControllerOfPersonalityChoice(String petName) {
     PersonalityStrategy selectedPersonality = mapNameToPersonality(petName);
@@ -418,8 +429,8 @@ public void notifyControllerOfPersonalityChoice(String petName) {
   /**
    * This method maps the index of the personality to the personality.
    *
-   * @param choice the index of the personality
-   * @return the personality
+   * @param petName the index of the personality
+   * @return the personality mapped to the index
    */
 private PersonalityStrategy mapNameToPersonality(String petName) {
     PersonalityStrategy selectedPersonality;
@@ -467,6 +478,12 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     healthBar.setForeground(Color.gray); 
   }
 
+
+  /**
+   * This method updates the score label.
+   *
+   * @param score the score to be displayed
+   */
   public void updateScore(int score) {
     scoreLabel.setText("Score: " + score);
   }
@@ -686,6 +703,12 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     displayPetSelectionDialog();
   }
 
+
+  /**
+   * This method adds an exercise listener to the exercise button.
+   *
+   * @param exerciseListener the listener to be added
+   */
   public void setActionButtonsEnabled(boolean enabled) {
     feedButton.setEnabled(enabled);
     playButton.setEnabled(enabled);
@@ -697,6 +720,15 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
   public class AlertUtils {
     private static boolean isDialogOpen = false;
 
+
+    /**
+     * This method displays an alert dialog with a message and title.
+     *
+     * @param message the message to be displayed
+     * @param title the title of the dialog
+     * @param action the action to be performed
+     * @param flag the flag to avoid duplicates
+     */
     public static void displayAlert(String message, String title, Runnable action, boolean flag) {
         if (!flag && !isDialogOpen) {
             isDialogOpen = true; // Set the flag to avoid duplicates
@@ -722,6 +754,12 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
     }
 }
 
+
+/**
+ * This method displays the inventory dialog.
+ * 
+ * @param items
+ */
     public void updateInventory(List<Item> items) {
         inventoryListModel.clear();
         for (Item item : items) {
@@ -729,10 +767,23 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
         }
     }
 
+
+    /**
+     * This method adds a use item listener to the use item button.
+     *
+     * @param listener the listener to be added
+     */
     public void addUseItemListener(ActionListener listener) {
         useItemButton.addActionListener(listener);
     }
 
+
+    /**
+     * This method displays the get selected item.
+     *
+     * @param items the items to be displayed
+     * @return null
+     */
     public Item getSelectedItem(List<Item> items) {
         int selectedIndex = inventoryList.getSelectedIndex();
         if (selectedIndex != -1) {
@@ -741,10 +792,22 @@ private PersonalityStrategy mapNameToPersonality(String petName) {
             return null;
         }
     }
+
+    /**
+     * This method displays the listen for vet button.
+     *
+     * @param listener
+     */
     public void addVetButtonListener(ActionListener listener) {
       vetButton.addActionListener(listener);
   }
 
+
+  /**
+   * This method updates the view with the model.
+   *
+   * @param model
+   */
   public void updateViewWithModel(Pet model) {
     updateScore(model.getscore());
     updateHealth(model.getHealth());

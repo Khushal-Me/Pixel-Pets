@@ -1,8 +1,16 @@
 import java.io.Serializable;
 
 /**
- * The Dog class implements the PersonalityStrategy interface and is Serializable.
- * It adjusts the behavior of a pet based on its health.
+ * The {@code Dog} class implements the {@link PersonalityStrategy} interface 
+ * and supports object serialization by implementing {@link Serializable}.
+ * 
+ * <p>
+ * This class adjusts the behavior of a pet based on its health. Specifically:
+ * <ul>
+ *   <li>If the health level is below 70, the preferred action is set to {@link Action#FEED}.</li>
+ *   <li>Otherwise, the preferred action is set to {@link Action#PLAY}.</li>
+ * </ul>
+ * </p>
  * 
  * <p>Usage example:</p>
  * <pre>
@@ -15,7 +23,6 @@ import java.io.Serializable;
  * 
  * @author Khushal
  * @version 1.0
- * @param pet the pet whose behavior is to be adjusted
  * @see PersonalityStrategy
  * @see Serializable
  * @see Pet
@@ -23,13 +30,24 @@ import java.io.Serializable;
  */
 public class Dog implements PersonalityStrategy, Serializable {
   private static final long serialVersionUID = 1L;
+
   /**
-   * The method that adjusts the behavior of the pet.
-   *
-   * @param pet the pet whose behavior is to be adjusted
+   * Adjusts the behavior of the given pet based on its health level.
+   * 
+   * <p>
+   * This method sets the preferred action of the pet to {@link Action#FEED} 
+   * if its health level is below 70. Otherwise, the preferred action is set 
+   * to {@link Action#PLAY}.
+   * </p>
+   * 
+   * @param pet the pet whose behavior is being adjusted
+   * @throws IllegalArgumentException if {@code pet} is {@code null}
    */
   @Override
   public void adjustBehavior(Pet pet) {
+    if (pet == null) {
+      throw new IllegalArgumentException("Pet cannot be null.");
+    }
     if (pet.getHealth() < 70) {
       pet.setPreferredAction(Action.FEED);
     } else {

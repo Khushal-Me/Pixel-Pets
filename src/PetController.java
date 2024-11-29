@@ -27,9 +27,6 @@ import javax.swing.SwingUtilities;
  *
  * @author Jonathan, Ramje, Khushal
  * @version 1.0
- * @see Pet
- * @see PetView
- * @see MainMenu
  */
 public class PetController {
 
@@ -49,6 +46,8 @@ public class PetController {
    *
    * @param model the model
    * @param view  the view
+   * @param mainMenu the main menu
+   * @param isNewGame whether the game is new
    */
   public PetController(Pet model, PetView view, MainMenu mainMenu, boolean isNewGame) {
     this.model = model;
@@ -110,6 +109,8 @@ public class PetController {
 
   /**
    * This method updates the view.
+   * 
+   * The view is updated with the current state of the model.
    */
   private void updateView() {
     view.updateScore(model.getscore());
@@ -135,7 +136,6 @@ public class PetController {
         handlePetDeath();
     } else {
         if (model.getHunger() > 60) {
-            //view.displayHungerAlert();
         }
     }
 }
@@ -199,7 +199,8 @@ public class PetController {
   /**
    * This method handles the selection of personality.
    *
-   * @param choice the personality choice
+   * @param personality the personality
+   * @param petName the pet name
    */
   public void handleSelectedPersonality(PersonalityStrategy personality, String petName) {
     model.setPersonality(personality);
@@ -209,18 +210,29 @@ public class PetController {
     view.updatePetImage(petName, false, false); // Pet is alive
 }
 
+/**
+ * This method handles the selection of pet.
+ *
+ * @param petType the pet type
+ */
 public void handleFeedAction() {
   model.feed();
   updateView();
   view.appendMessage(model.getMessage());
 }
 
+/**
+ * This method handles the play action.
+ */
 public void handlePlayAction() {
   model.play();
   updateView();
   view.appendMessage(model.getMessage());
 }
 
+/**
+ * This method handles the sleep action.
+ */
 public void handleSleepAction() {
   try {
       model.sleep();
@@ -230,6 +242,9 @@ public void handleSleepAction() {
       return;
   }
 
+/**
+* This method handles messages when the pet wakes up.
+ */
   view.appendMessage(model.getMessage());
   //Schedule wake-up actions
     executorService.schedule(() -> {
@@ -314,6 +329,10 @@ public void handleSleepAction() {
   }
   }
 
+/**
+ * This method handles the back to main menu action.
+ */
+
   public void handleBackToMainMenu() {
     // Perform any necessary cleanup
     String slot;
@@ -344,11 +363,19 @@ public void handleSleepAction() {
     mainMenu.setVisible(true);
 }
 
+/**
+ * This method updates the inventory view.
+ */
+
 private void updateInventoryView() {
         List<Item> items = model.getInventory().getItems();
         view.updateInventory(items);
     }
 
+
+    /**
+     * This method handles the use item action.
+     */
     private void handleUseItem() {
         List<Item> items = model.getInventory().getItems();
         Item selectedItem = view.getSelectedItem(items);
@@ -361,11 +388,19 @@ private void updateInventoryView() {
             JOptionPane.showMessageDialog(view, "Please select an item to use.", "No Item Selected", JOptionPane.WARNING_MESSAGE);
         }
     }
+
+    /**
+     * This method handles the vet action.
+     */
     private void handleVetAction() {
       model.increaseHealth(30);
       updateView();
       view.appendMessage("You took your pet to the vet. Health increased by 30.");
   }
+
+  /**
+   * This method handles the revive pet action.
+   */
   private void handleRevivePet() {
     String password = JOptionPane.showInputDialog(view, "Enter parental password to revive the pet:", "Revive Pet", JOptionPane.WARNING_MESSAGE);
     if (password != null && password.equals("CS2212A")) {
@@ -383,6 +418,10 @@ private void updateInventoryView() {
         handlePetDeath();
     }
 }
+
+/**
+ * This method checks the playtime restriction.
+ */
 private void checkPlayTimeRestriction() {
     sessionPlayTime++; // Increment session playtime by 1 minute
     int totalPlayTime = mainMenu.getTotalPlayTime() + sessionPlayTime;
@@ -396,6 +435,10 @@ private void checkPlayTimeRestriction() {
   }
 }
 
+
+/**
+ * This method exits the game due to playtime limit.
+ */
 private void exitGameDueToPlayTimeLimit() {
   // Save the game state if necessary
   String slot;
@@ -425,6 +468,10 @@ private void exitGameDueToPlayTimeLimit() {
   mainMenu.setVisible(true);
 }
 
+
+/**
+ * This method handles the save action.
+ */
 private void handleSaveAction() {
   String slot;
   while (true) {
@@ -444,11 +491,19 @@ private void handleSaveAction() {
   JOptionPane.showMessageDialog(view, "Game saved successfully.");
 }
 
+
+/**
+ * This method cleans up the controller.
+ */
 public void cleanup() {
   model.stopTimers();
   executorService.shutdownNow();
   view.dispose();
 }
+
+/**
+ * This method handles the exercise action.
+ */
 public void handleExerciseAction() {
   model.exercise();
   updateView();

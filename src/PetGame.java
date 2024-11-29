@@ -10,7 +10,6 @@
  * 
  * @author Jonathan, Ramje, Khushal
  * @version 1.0
- * @see MainMenu
  */
 public class PetGame {
 

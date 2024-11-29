@@ -24,17 +24,6 @@
  * 
  * @author Khushal
  * @version 1.0
- * 
- * @see PersonalityStrategy
- * @see Mood
- * @see Action
- * @see Pet
- * @see PetView
- * @see PetController
- * @see MainMenu
- * @see PetGame
- * @see PetModel
- * @see PetView
  *
  */
 public interface PetModel {

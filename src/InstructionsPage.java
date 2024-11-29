@@ -2,23 +2,26 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-
 /**
  * A class representing the Instructions Page of the Pixel Pets game.
  * This page displays game instructions and rules in a graphical user interface.
  * 
- * The page features:
- * - A gradient background
- * - Navigation buttons (Return to Main Menu and Quit Game)
- * - Detailed game instructions with formatted HTML content
- * - Responsive hover effects on buttons
+ * <p>The page features:</p>
+ * <ul>
+ *   <li>A gradient background</li>
+ *   <li>Navigation buttons (Return to Main Menu and Quit Game)</li>
+ *   <li>Detailed game instructions with formatted HTML content</li>
+ *   <li>Responsive hover effects on buttons</li>
+ * </ul>
  * 
- * The instructions include:
- * - Pet selection information
- * - Basic gameplay mechanics
- * - Pet care instructions
- * - Tips for maintaining pet stats
- *
+ * <p>The instructions include:</p>
+ * <ul>
+ *   <li>Pet selection information</li>
+ *   <li>Basic gameplay mechanics</li>
+ *   <li>Pet care instructions</li>
+ *   <li>Tips for maintaining pet stats</li>
+ * </ul>
+ * 
  * The page uses a BorderLayout with custom styled components and
  * implements a clean, user-friendly interface with a soothing color scheme.
  *
@@ -46,7 +49,7 @@ public class InstructionsPage extends JFrame {
         // Top panel with buttons
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
-        topPanel.setPreferredSize(new Dimension(800, 50)); // Reduced the height of the top panel
+        topPanel.setPreferredSize(new Dimension(800, 50));
 
         // Styled buttons
         JButton returnButton = createStyledButton("Return to Main Menu", 220, 40);
@@ -67,34 +70,31 @@ public class InstructionsPage extends JFrame {
         // Center panel with instructions
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setOpaque(false);
-        //centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0)); // Added top padding
 
         JLabel instructionsLabel = new JLabel("<html><div style='padding: 0 10px; max-width: 700px;'>" +
-        "<h1 style='color: #2C3E50; text-align: center; margin-bottom: 15px;'>Welcome to Pixel Pets!</h1>" +
-        "<div style='font-size: 16px; color: #34495E; line-height: 1.8;'>" +
-        "<p style='text-align: center;'>Take care of your Pixel Pet by meeting their needs and keeping them happy.</p>" +
-        "<h2 style='color: #2980B9; margin-bottom: 10px;'>How to Play</h2>" +
-        "<ul style='list-style-type: disc; padding-left: 20px;'>" +
-        "<li><strong>Choose Your Pet:</strong> Dog, Cat, or Bird.</li>" +
-        "<li><strong>Care for Your Pet:</strong>" +
-        "<ul style='list-style-type: circle; padding-left: 20px;'>" +
-        "<li>Feed them when hungry.</li>" +
-        "<li>Play with them when lonely.</li>" +
-        "<li>Let them rest when tired.</li>" +
-        "</ul></li>" +
-        "<li><strong>Monitor Stats:</strong> Health, Hunger, Mood, Energy, and Social.</li>" +
-        "</ul>" +
-        "<h2 style='color: #2980B9; margin-bottom: 10px;'>Tips</h2>" +
-        "<ul style='list-style-type: disc; padding-left: 20px;'>" +
-        "<li>Balance their needs to keep them happy and healthy.</li>" +
-        "<li>Neglecting your pet can lower their stats—act fast!</li>" +
-        "</ul>" +
-        "<p style='text-align: center; color: #E74C3C; font-weight: bold;'>Keep your pet thriving and enjoy your time together!</p>" +
-        "</div></html>");
-
+                "<h1 style='color: #2C3E50; text-align: center; margin-bottom: 15px;'>Welcome to Pixel Pets!</h1>" +
+                "<div style='font-size: 16px; color: #34495E; line-height: 1.8;'>" +
+                "<p style='text-align: center;'>Take care of your Pixel Pet by meeting their needs and keeping them happy.</p>" +
+                "<h2 style='color: #2980B9; margin-bottom: 10px;'>How to Play</h2>" +
+                "<ul style='list-style-type: disc; padding-left: 20px;'>" +
+                "<li><strong>Choose Your Pet:</strong> Dog, Cat, or Bird.</li>" +
+                "<li><strong>Care for Your Pet:</strong>" +
+                "<ul style='list-style-type: circle; padding-left: 20px;'>" +
+                "<li>Feed them when hungry.</li>" +
+                "<li>Play with them when lonely.</li>" +
+                "<li>Let them rest when tired.</li>" +
+                "</ul></li>" +
+                "<li><strong>Monitor Stats:</strong> Health, Hunger, Mood, Energy, and Social.</li>" +
+                "</ul>" +
+                "<h2 style='color: #2980B9; margin-bottom: 10px;'>Tips</h2>" +
+                "<ul style='list-style-type: disc; padding-left: 20px;'>" +
+                "<li>Balance their needs to keep them happy and healthy.</li>" +
+                "<li>Neglecting your pet can lower their stats—act fast!</li>" +
+                "</ul>" +
+                "<p style='text-align: center; color: #E74C3C; font-weight: bold;'>Keep your pet thriving and enjoy your time together!</p>" +
+                "</div></html>");
 
         instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-
         centerPanel.add(instructionsLabel);
 
         // Add panels to gradient background
@@ -140,7 +140,6 @@ public class InstructionsPage extends JFrame {
 
     /**
      * Custom JPanel to render a gradient background.
-     * @param Graphics object
      */
     private static class GradientPanel extends JPanel {
         @Override

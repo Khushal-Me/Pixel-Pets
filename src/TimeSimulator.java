@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
  * @author Ramje, Khushal
  * @version 1.0
  * 
- * @see Pet
  * @see Serializable
  */
 public class TimeSimulator implements Serializable {
@@ -44,6 +43,10 @@ public class TimeSimulator implements Serializable {
     executorService = Executors.newScheduledThreadPool(1);
   }
 
+
+  /**
+   * Initialize the executor service.
+   */
   private void initializeExecutorService() {
     executorService = Executors.newScheduledThreadPool(1);
   }
@@ -80,6 +83,14 @@ public class TimeSimulator implements Serializable {
       executorService.shutdownNow();
     }
   }
+
+  /**
+   * Custom serialization handling to reinitialize transient fields after deserialization.
+   *
+   * @param ois the object input stream
+   * @throws IOException if an I/O error occurs
+   * @throws ClassNotFoundException if the class of the serialized object could not be found
+   */
   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
   ois.defaultReadObject(); // Perform default deserialization
 

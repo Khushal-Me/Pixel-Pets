@@ -38,6 +38,17 @@ public class MainMenu extends JFrame {
     private JSlider volumeSlider;
 
 
+    /**
+     * A custom JPanel class that creates a gradient background.
+     * The panel displays a vertical gradient from light blue at the top
+     * to light cyan at the bottom, creating a soft, pastel appearance.
+     * 
+     * The gradient is redrawn every time the component is painted,
+     * ensuring proper resizing behavior.
+     * 
+     * This class extends JPanel and overrides the paintComponent method
+     * to implement the gradient painting functionality.
+     */
     private static class GradientPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
@@ -126,8 +137,14 @@ public class MainMenu extends JFrame {
             musicPlayer.setVolume(volume);
         });
 
-        // Window listener (same as before)
+        // Window listener
         addWindowListener(new WindowAdapter() {
+            /**
+             * Invoked when the user attempts to close the window.
+             * Stops the background music when the window is closing.
+             *
+             * @param e the WindowEvent object containing details about the window closing event
+             */
             @Override
             public void windowClosing(WindowEvent e) {
                 musicPlayer.stopMusic();
@@ -135,7 +152,13 @@ public class MainMenu extends JFrame {
         });
     }
 
-    // Singleton pattern to ensure only one instance of MainMenu is created
+    /**
+     * Returns the singleton instance of MainMenu.
+     * If the instance doesn't exist, creates a new one using the private constructor.
+     * This ensures only one instance of MainMenu exists throughout the application lifecycle.
+     *
+     * @return The singleton instance of MainMenu
+     */
     public static MainMenu getInstance() {
         if (instance == null) {
             instance = new MainMenu();
@@ -143,6 +166,17 @@ public class MainMenu extends JFrame {
         return instance;
     }
 
+    /**
+     * Creates a custom styled JButton with predefined visual properties.
+     * The button features a white background, blue border, and hover effects.
+     *
+     * @param text The text to display on the button
+     * @param x The x-coordinate position of the button
+     * @param y The y-coordinate position of the button
+     * @param width The width of the button in pixels
+     * @param height The height of the button in pixels
+     * @return A styled JButton with the specified properties
+     */
     private JButton createStyledButton(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.PLAIN, 20));

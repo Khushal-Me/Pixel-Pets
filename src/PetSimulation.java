@@ -23,9 +23,6 @@ import java.io.PrintWriter;
  * 
  * @author Khushal
  * @version 1.0
- * 
- * @see Pet
- * @see Mood
  */
 public class PetSimulation {
 

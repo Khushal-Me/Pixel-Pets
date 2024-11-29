@@ -16,6 +16,12 @@ public class Vegetables extends Food {
         super("Vegetables");
     }
 
+
+    /**
+     * Feeds the pet with vegetables.
+     * 
+     * @param pet The pet to feed vegetables.
+     */
     @Override
     public void use(Pet pet) {
         pet.feedVegetables();
