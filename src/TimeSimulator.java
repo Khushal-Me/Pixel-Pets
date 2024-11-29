@@ -6,9 +6,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class is responsible for updating the pet's attributes every minute.
- */
-/**
  * A class that simulates the passage of time and updates pet attributes periodically.
  * This class implements Serializable to allow for object persistence.
  * It manages a scheduled executor service that periodically updates the pet's attributes
@@ -24,8 +21,10 @@ import java.util.concurrent.TimeUnit;
  *   <li>Decreasing social interaction
  *   <li>Checking attribute bounds
  *   <li>Adjusting behavior based on personality
-*
- *
+ * 
+ * @author Ramje, Khushal
+ * @version 1.0
+ * 
  * @see Pet
  * @see Serializable
  */

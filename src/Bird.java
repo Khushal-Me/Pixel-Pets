@@ -16,6 +16,9 @@ import java.io.Serializable;
  * Otherwise, the preferred action is set to SLEEP.
  * </p>
  * 
+ * @author Khushal
+ * @version 1.0
+ * @param pet the pet whose behavior is to be adjusted
  * @see PersonalityStrategy
  * @see Serializable
  */

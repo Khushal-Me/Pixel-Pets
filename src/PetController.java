@@ -25,6 +25,8 @@ import javax.swing.SwingUtilities;
  * This class uses an ExecutorService for scheduling periodic tasks and maintains
  * session information such as playtime tracking.
  *
+ * @author Jonathan, Ramje, Khushal
+ * @version 1.0
  * @see Pet
  * @see PetView
  * @see MainMenu

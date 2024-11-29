@@ -2,9 +2,24 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+
 /**
- * The {@code ParentalControlsDialog} class represents a dialog window that allows parents
- * to set playtime restrictions for the game and view the total playtime.
+ * A dialog window that provides parental control functionalities for the virtual pet game.
+ * This dialog requires password authentication and allows parents to manage various game settings and statistics.
+ *
+ * Features include:
+ * - Setting playtime restrictions
+ * - Viewing and resetting player statistics
+ * - Reviving deceased pets
+ * - Navigation controls to return to main menu or quit game
+ *
+ * The dialog implements security through a password check ("CS2212A") before allowing access to parental controls.
+ * All changes made through this dialog directly affect the main game state through the MainMenu reference.
+ *
+ * @author Jonathan, Ramje
+ * @version 1.0
+ * @see MainMenu
+ * @see JDialog
  */
 public class ParentalControlsDialog extends JDialog {
     private JTextField playTimeField;

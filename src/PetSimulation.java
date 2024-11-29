@@ -21,6 +21,11 @@ import java.io.PrintWriter;
  * If an IO error occurs during file writing, an error message is printed to
  * standard error.
  * 
+ * @author Khushal
+ * @version 1.0
+ * 
+ * @see Pet
+ * @see Mood
  */
 public class PetSimulation {
 

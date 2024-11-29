@@ -18,6 +18,9 @@ import javax.swing.border.LineBorder;
  * - Smooth transition to game start
  * - Integration with main menu and game controller
  * 
+ * @author Ramje, Khushal
+ * @version 1.0
+ * 
  * @see MainMenu
  * @see PetController
  * @see PetView

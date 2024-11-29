@@ -7,6 +7,11 @@ import java.io.Serializable;
  * 
  * The Item class enforces implementation of a use method through its abstract nature,
  * while providing common functionality like storing and retrieving the item's name.
+ * 
+ * @author Ramje
+ * @version 1.0
+ * @param name The name of the item
+ * @param pet The pet to use the item on
  */
 public abstract class Item implements Serializable {
     private final String name;

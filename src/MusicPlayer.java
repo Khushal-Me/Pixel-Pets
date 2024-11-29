@@ -1,10 +1,26 @@
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.*;
-
 /**
- * The {@code MusicPlayer} class provides functionality to play, stop, and change background music in the application.
- * It follows the singleton design pattern to ensure only one instance manages the music playback.
+ * A singleton class that manages audio playback functionality for the application.
+ * This class provides methods to play, stop, and control background music.
+ * It implements the singleton pattern to ensure only one instance of the music player exists.
+ * 
+ * The class supports:
+ * - Playing audio files with continuous looping
+ * - Stopping currently playing music
+ * - Changing between different music tracks
+ * - Volume control
+ * 
+ * Usage example:
+ * {@code
+ * MusicPlayer player = MusicPlayer.getInstance();
+ * player.playMusic("path/to/music.wav");
+ * player.setVolume(0.5f);
+ * }
+ * 
+ * @author Ramje, Khushal
+ * @version 1.0
  */
 public class MusicPlayer {
 

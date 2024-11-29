@@ -17,6 +17,9 @@ import java.util.Properties;
  * - Play time restriction: Integer.MAX_VALUE (unlimited)
  * - Total play time: 0
  *
+ * @author Ramje
+ * @version 1.0
+ * 
  */
 public class Settings {
     private static final String SETTINGS_FILE = "settings.properties";

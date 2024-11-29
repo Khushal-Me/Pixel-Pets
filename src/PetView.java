@@ -29,6 +29,21 @@ import javax.swing.border.LineBorder;
  * - {@code PetSelectionDialog}: Facilitates pet selection during initialization.
  *
  * Part of the Pixel Pets game and follows the Model-View-Controller (MVC) design pattern.
+ * 
+ * @author Chris, Jonathan, Ramje, Khushal
+ * @version 1.0
+ * 
+ * @see PetController
+ * @see PersonalityStrategy
+ * @see PetSelectionDialog
+ * @see Pet
+ * @see Item
+ * @see Action
+ * @see MusicPlayer
+ * @see Mood
+ * @see Inventory
+ * @see PetSimulation
+ * 
  */
 public class PetView extends JFrame {
 

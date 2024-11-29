@@ -34,6 +34,8 @@ import java.util.concurrent.TimeUnit;
  * All attributes are bounded between 0 and 100, and the pet's health
  * decreases when its needs (hunger, social, sleep) are not met.
  * 
+ * @author Jonathan, Ramje, Khushal
+ * @version 1.0
  * @see PetModel
  * @see Serializable
  * @see PersonalityStrategy

@@ -10,6 +10,8 @@ import java.util.List;
  * <p>The Inventory class maintains a list of items and provides basic operations
  * to add and remove items from the inventory.</p>
  * 
+ * @author Ramje
+ * @version 1.0
  * @see Item
  * @see Serializable
  * @see List

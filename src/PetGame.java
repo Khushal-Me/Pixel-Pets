@@ -7,6 +7,10 @@
  * The application starts with creating instances of the model, view, and menu,
  * then sets up the controller to manage interactions between these components.
  * The main menu is initially hidden, while the main view is displayed to the user.
+ * 
+ * @author Jonathan, Ramje, Khushal
+ * @version 1.0
+ * @see MainMenu
  */
 public class PetGame {
 

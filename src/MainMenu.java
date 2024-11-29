@@ -20,6 +20,9 @@ import javax.swing.border.LineBorder;
  * The main menu serves as the central navigation hub for the game, managing transitions
  * between different game states and maintaining persistent settings.
  *
+ * @author Jonathan, Ramje, Khushal
+ * @version 1.0
+ * 
  * @see MusicPlayer
  * @see Settings
  * @see Pet
@@ -163,6 +166,17 @@ public class MainMenu extends JFrame {
         return button;
     }
 
+    /**
+     * Initializes and starts a new game session.
+     * This method:
+     * - Changes the background music to gameplay music
+     * - Creates new instances of the pet model, view and controller components
+     * - Hides the main menu
+     * - Sets up window listeners to handle game window closure
+     * - Displays the game window
+     * 
+     * When the game window is closed, the main menu becomes visible again.
+     */
     private void startNewGame() {
         // Change the music to normal gameplay music
         MusicPlayer.getInstance().changeMusic("src/res/Alive.wav");
@@ -188,6 +202,12 @@ public class MainMenu extends JFrame {
     }
 
 
+    /**
+     * Opens the instructions page window and manages its visibility.
+     * When opened, hides the main menu window and displays the instructions page.
+     * When the instructions page is closed, the main menu window becomes visible again.
+     */
+
     private void openInstructionsPage() {
         setVisible(false); // Hide the main menu
         InstructionsPage instructionsPage = new InstructionsPage();
@@ -200,6 +220,23 @@ public class MainMenu extends JFrame {
         });
     }
 
+
+    /**
+     * Handles the game loading functionality from a saved slot.
+     * Prompts the user to select a save slot (1-3) and loads the corresponding saved game.
+     * If successful, initializes the game view and controller with the loaded pet data.
+     * Changes background music to gameplay music and sets up auto-save functionality.
+     * If loading fails, displays an error message.
+     * 
+     * The method performs the following steps:
+     * 1. Prompts for save slot selection
+     * 2. Validates user input
+     * 3. Attempts to load pet data
+     * 4. Initializes game components if load successful
+     * 5. Sets up window listeners for proper menu/game navigation
+     * 
+     * @throws IllegalStateException Implicitly if the music file cannot be loaded
+     */
 
     private void loadGame() {
         String slot;
@@ -248,10 +285,25 @@ public class MainMenu extends JFrame {
     }
 
 
+    /**
+     * Opens the Parental Controls dialog window.
+     * Creates a new instance of ParentalControlsDialog and makes it visible to the user.
+     * This method allows access to parental control settings and restrictions.
+     */
+
     private void openParentalControls() {
         ParentalControlsDialog parentalControlsDialog = new ParentalControlsDialog(this);
         parentalControlsDialog.setVisible(true);
     }
+
+    /**
+     * The main entry point of the application.
+     * Initializes and displays the main menu of the game using Swing.
+     * Uses the system's default look and feel for UI components.
+     * Implements the Singleton pattern to ensure only one instance of MainMenu exists.
+     *
+     * @param args Command line arguments
+     */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

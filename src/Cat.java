@@ -21,6 +21,9 @@ import java.io.Serializable;
  * }
  * </pre>
  * 
+ * @author Khushal
+ * @version 1.0
+ * @param pet the pet whose behavior is to be adjusted
  * @see PersonalityStrategy
  * @see Serializable
  */

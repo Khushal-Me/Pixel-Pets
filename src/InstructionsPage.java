@@ -2,9 +2,30 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+
 /**
- * The InstructionsPage class represents the instruction window for the PixelPets game.
- * It displays instructions and provides options to return to the main menu or quit the game.
+ * A class representing the Instructions Page of the Pixel Pets game.
+ * This page displays game instructions and rules in a graphical user interface.
+ * 
+ * The page features:
+ * - A gradient background
+ * - Navigation buttons (Return to Main Menu and Quit Game)
+ * - Detailed game instructions with formatted HTML content
+ * - Responsive hover effects on buttons
+ * 
+ * The instructions include:
+ * - Pet selection information
+ * - Basic gameplay mechanics
+ * - Pet care instructions
+ * - Tips for maintaining pet stats
+ *
+ * The page uses a BorderLayout with custom styled components and
+ * implements a clean, user-friendly interface with a soothing color scheme.
+ *
+ * @author Chris, Khushal
+ * @version 1.0
+ * @see MainMenu
+ * @see JFrame
  */
 public class InstructionsPage extends JFrame {
 
@@ -119,6 +140,7 @@ public class InstructionsPage extends JFrame {
 
     /**
      * Custom JPanel to render a gradient background.
+     * @param Graphics object
      */
     private static class GradientPanel extends JPanel {
         @Override
