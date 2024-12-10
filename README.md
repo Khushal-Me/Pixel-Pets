@@ -106,13 +106,6 @@ The game includes a password-protected parental controls screen where parents ca
 
 ---
 
-## Known Issues
-
-- Multiplayer and high-score functionalities are not yet implemented.  
-- UI scaling may not be fully compatible with all screen sizes.  
-
----
-
 ## Credits
 
 Developed by Group 7 for UWO, Fall 2024.  
